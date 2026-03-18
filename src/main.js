@@ -2,6 +2,7 @@ import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import './style.css'
 import candidates from '../data/candidates.json'
+import usBoundary from '../data/us-boundary.json'
 
 /** Map office strings from the data to display categories */
 const OFFICE_CATEGORY = {
@@ -36,13 +37,37 @@ function officeCategory(office) {
 const isMobile = window.innerWidth < 768
 const map = L.map('map').setView(isMobile ? [37, -80] : [39.8, -98.5], isMobile ? 4 : 4)
 
-L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  maxZoom: 19,
+L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+  maxZoom: 20,
   attribution:
-    '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+  subdomains: 'abcd',
 }).addTo(map)
 
 window.addEventListener('resize', () => map.invalidateSize())
+
+// --- Mask (dim areas outside the US) ---
+
+;(function addMask() {
+  const outer = [
+    [90, -180],
+    [90, 180],
+    [-90, 180],
+    [-90, -180],
+  ]
+
+  const holes = usBoundary.features[0].geometry.coordinates.map((polygon) =>
+    polygon[0].map(([lng, lat]) => [lat, lng]),
+  )
+
+  L.polygon([outer, ...holes], {
+    fillColor: '#000',
+    fillOpacity: 0.4,
+    stroke: false,
+    interactive: false,
+    renderer: L.svg({ padding: 1 }),
+  }).addTo(map)
+})()
 
 // --- Markers ---
 

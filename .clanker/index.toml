@@ -1,9 +1,6 @@
 version = 1
 
 [[queue]]
-file = "build-the-base-leaflet-map.md"
-
-[[queue]]
 file = "add-colored-candidate-markers-by-office-type.md"
 
 [[queue]]
@@ -23,3 +20,6 @@ file = "project-scaffolding-initialize-vite-leaflet.md"
 
 [[completed]]
 file = "create-sample-candidate-data-and-json-schema.md"
+
+[[completed]]
+file = "build-the-base-leaflet-map.md"

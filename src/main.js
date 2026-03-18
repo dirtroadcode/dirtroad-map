@@ -9,6 +9,8 @@ const OFFICE_CATEGORY = {
   'State House': 'state',
   'State Representative': 'state',
   'State Senate': 'state',
+  'State Assembly': 'state',
+  'State Delegate': 'state',
   'County Commissioner': 'county',
   'City Council': 'local',
   'School Board': 'local',

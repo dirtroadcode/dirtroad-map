@@ -2,7 +2,7 @@
   {
     "name": "Joan Presley",
     "office": "County Commissioner",
-    "district": "Warren County",
+    "district": "McMinnville, Tennessee",
     "photo": "",
     "website": "",
     "cycle": "2026",
@@ -12,8 +12,8 @@
   {
     "name": "Dustin Vigneault",
     "office": "State Representative",
-    "district": "Haverhill, NH",
-    "photo": "",
+    "district": "Haverhill, New Hampshire",
+    "photo": "https://s3.amazonaws.com/ballotpedia-api4/files/thumbs/200/300/DustinVigneault2024.jpg",
     "website": "",
     "cycle": "2026",
     "lat": 44.0342717,
@@ -22,9 +22,9 @@
   {
     "name": "Charles Tilburg",
     "office": "State Representative",
-    "district": "Buxton, ME",
-    "photo": "",
-    "website": "",
+    "district": "Buxton, Maine",
+    "photo": "https://images.squarespace-cdn.com/content/v1/69336a297adefc01edd6325f/f9be4079-c292-4e52-9aea-89e74266692e/_B5_5624+%281%29.jpg",
+    "website": "https://www.charlestilburg.com/",
     "cycle": "2026",
     "lat": 43.612404,
     "lng": -70.540878
@@ -32,9 +32,9 @@
   {
     "name": "Charly Ray",
     "office": "State Senate",
-    "district": "Bayfield County, WI",
-    "photo": "",
-    "website": "",
+    "district": "Bayview Township, Wisconsin",
+    "photo": "https://images.squarespace-cdn.com/content/v1/690bb6530aefb420928b5119/d49f138c-6e38-4512-8f22-3e2b8249b5b2/Charly-Ray-Logobg.png",
+    "website": "https://www.rayforwi.com/",
     "cycle": "2026",
     "lat": 46.4710241,
     "lng": -91.1983175
@@ -42,8 +42,8 @@
   {
     "name": "Kirstan Watson",
     "office": "State Representative",
-    "district": "Arundel, ME",
-    "photo": "",
+    "district": "Arundel, Maine",
+    "photo": "https://vote-usa.org/Image.aspx?Id=MEWatsonKirstanL&Col=Profile300&Def=Profile300",
     "website": "",
     "cycle": "2026",
     "lat": 43.3825857,
@@ -52,9 +52,9 @@
   {
     "name": "Ali Simpson",
     "office": "State Representative",
-    "district": "Ten Mile, TN",
-    "photo": "",
-    "website": "",
+    "district": "Ten Mile, Tennessee",
+    "photo": "https://images.squarespace-cdn.com/content/v1/68cc659f41895b54f0820899/ea76691e-95d8-400e-b752-ba30a2a3b139/AliSimpson.jpeg",
+    "website": "https://www.simpson4tn32.com/",
     "cycle": "2026",
     "lat": 35.6667394,
     "lng": -84.6646604
@@ -62,7 +62,7 @@
   {
     "name": "Allen Davis",
     "office": "State Representative",
-    "district": "Dublin, NH",
+    "district": "Dublin, New Hampshire",
     "photo": "",
     "website": "",
     "cycle": "2026",
@@ -72,9 +72,9 @@
   {
     "name": "Madison Cook",
     "office": "State Representative",
-    "district": "Belfast, ME",
-    "photo": "",
-    "website": "",
+    "district": "Belfast, Maine",
+    "photo": "https://images.squarespace-cdn.com/content/v1/6979096572d66041dee9282b/9ffa7dfa-163c-4b74-9206-7d3df3792506/IMG_5200.jpeg",
+    "website": "https://www.madisonformaine.com/",
     "cycle": "2026",
     "lat": 44.4261759,
     "lng": -69.0065207
@@ -82,9 +82,9 @@
   {
     "name": "Reggie Spaulding",
     "office": "State Representative",
-    "district": "Missoula, MT",
-    "photo": "",
-    "website": "",
+    "district": "Missoula, Montana",
+    "photo": "https://images.squarespace-cdn.com/content/v1/68b4e9b1dcf6053c8e1ced45/48c104aa-048c-415a-b4f6-af719c45c507/L_shade+copy.png",
+    "website": "https://reggiespauldingformt.org/",
     "cycle": "2026",
     "lat": 46.8701049,
     "lng": -113.995267
@@ -92,7 +92,7 @@
   {
     "name": "Hannah Cole",
     "office": "State Representative",
-    "district": "Teresita, OK",
+    "district": "Teresita, Oklahoma",
     "photo": "",
     "website": "",
     "cycle": "2026",
@@ -100,11 +100,21 @@
     "lng": -94.9927351
   },
   {
+    "name": "Gaston Bathalon",
+    "office": "State Senate",
+    "district": "Troy, Vermont",
+    "photo": "https://images.squarespace-cdn.com/content/v1/68f4fb78c0b14a57ff5c1aba/01e61fb3-5b5f-4765-b493-e79df0ba436c/gaston+bathalon+%28Email+Header%29+%281%29.png",
+    "website": "https://www.bathalonforvermont.com/",
+    "cycle": "2026",
+    "lat": 44.9037718,
+    "lng": -72.4058578
+  },
+  {
     "name": "Melanie Miller",
     "office": "State Representative",
-    "district": "White Plains, GA",
-    "photo": "",
-    "website": "",
+    "district": "White Plains, Georgia",
+    "photo": "https://s3.amazonaws.com/ballotpedia-api4/files/thumbs/200/300/Melanie_Miller_20240808_095048.jpeg",
+    "website": "https://www.melaniemillerforga.com/",
     "cycle": "2026",
     "lat": 33.4720779,
     "lng": -83.035429
@@ -112,7 +122,7 @@
   {
     "name": "Chris Conroy",
     "office": "State Representative",
-    "district": "Weare, NH",
+    "district": "Weare, New Hampshire",
     "photo": "",
     "website": "",
     "cycle": "2026",
@@ -122,7 +132,7 @@
   {
     "name": "Azalea Cormier",
     "office": "State Representative",
-    "district": "Buckfield, ME",
+    "district": "Buckfield, Maine",
     "photo": "",
     "website": "",
     "cycle": "2026",
@@ -142,9 +152,9 @@
   {
     "name": "Iva Markicevic Daley",
     "office": "State Representative",
-    "district": "Sandy Hook, KY",
-    "photo": "",
-    "website": "",
+    "district": "Sandy Hook, Kentucky",
+    "photo": "https://www.forwardky.com/content/images/size/w1200/2025/12/IvaDaley_featured.jpg",
+    "website": "https://www.ivaforkentucky.com/",
     "cycle": "2026",
     "lat": 38.0864739,
     "lng": -83.1262839
@@ -152,9 +162,9 @@
   {
     "name": "Steven Gupton",
     "office": "School Board",
-    "district": "Louisburg",
-    "photo": "",
-    "website": "",
+    "district": "Louisburg, North Carolina",
+    "photo": "https://www.ednc.org/wp-content/uploads/2020/04/steven-gup.jpeg",
+    "website": "https://stevengupton.com/",
     "cycle": "2026",
     "lat": 36.0990393,
     "lng": -78.301106
@@ -162,7 +172,7 @@
   {
     "name": "Bobbi Cummiskey",
     "office": "City Council",
-    "district": "Bend",
+    "district": "Bend, Oregon",
     "photo": "",
     "website": "",
     "cycle": "2026",
@@ -172,11 +182,231 @@
   {
     "name": "Derek Hopkins",
     "office": "State Representative",
-    "district": "Asheville, NC",
+    "district": "NCs 11th Congressional District",
+    "photo": "",
+    "website": "",
+    "cycle": "Not sure yet!",
+    "lat": 35.595363,
+    "lng": -82.5508407
+  },
+  {
+    "name": "Laura Sirot",
+    "office": "State Senate",
+    "district": "District 31",
     "photo": "",
     "website": "",
     "cycle": "2026",
-    "lat": 35.595363,
-    "lng": -82.5508407
+    "lat": 40.7980976,
+    "lng": -81.9397733
+  },
+  {
+    "name": "Whitney Echenique",
+    "office": "State Representative",
+    "district": "District 2",
+    "photo": "",
+    "website": "",
+    "cycle": "2026",
+    "lat": 34.7691867,
+    "lng": -84.9702475
+  },
+  {
+    "name": "Matthew Townsend",
+    "office": "State Representative",
+    "district": "District 67",
+    "photo": "",
+    "website": "",
+    "cycle": "2026",
+    "lat": 44.588511,
+    "lng": -69.599075
+  },
+  {
+    "name": "Thomas O'Donnell",
+    "office": "State Representative",
+    "district": "District 87",
+    "photo": "",
+    "website": "",
+    "cycle": "2026",
+    "lat": 40.7301997,
+    "lng": -91.9621393
+  },
+  {
+    "name": "Zeppelin Zeerip",
+    "office": "State Representative",
+    "district": "District 4",
+    "photo": "",
+    "website": "",
+    "cycle": "2026",
+    "lat": 40.7146758,
+    "lng": -111.300734
+  },
+  {
+    "name": "Jamie Collins",
+    "office": "County Commissioner",
+    "district": "Deschutes County",
+    "photo": "",
+    "website": "",
+    "cycle": "2026",
+    "lat": 44.0581728,
+    "lng": -121.3153096
+  },
+  {
+    "name": "Barbara Gooby",
+    "office": "State Senate",
+    "district": "District 1",
+    "photo": "",
+    "website": "",
+    "cycle": "2026",
+    "lat": 32.0790074,
+    "lng": -81.0921335
+  },
+  {
+    "name": "Diana Spangler",
+    "office": "State Representative",
+    "district": "District 16",
+    "photo": "",
+    "website": "",
+    "cycle": "2026",
+    "lat": 33.9237141,
+    "lng": -84.8407732
+  },
+  {
+    "name": "Will Rivera",
+    "office": "City Council",
+    "district": "Oneonta",
+    "photo": "",
+    "website": "",
+    "cycle": "2025",
+    "lat": 42.453492,
+    "lng": -75.0629531
+  },
+  {
+    "name": "Kenneth Matthews",
+    "office": "State Senate",
+    "district": "District 4",
+    "photo": "",
+    "website": "",
+    "cycle": "2026",
+    "lat": 38.4325896,
+    "lng": -82.0201368
+  },
+  {
+    "name": "Marta Beck",
+    "office": "State Representative",
+    "district": "District 98",
+    "photo": "",
+    "website": "",
+    "cycle": "2026",
+    "lat": 39.2495466,
+    "lng": -77.9586082
+  },
+  {
+    "name": "Randall Putz",
+    "office": "State Assembly",
+    "district": "District 34",
+    "photo": "",
+    "website": "",
+    "cycle": "2026",
+    "lat": 34.2440587,
+    "lng": -116.91018
+  },
+  {
+    "name": "Bennie Taylor",
+    "office": "State Representative",
+    "district": "District 42",
+    "photo": "",
+    "website": "",
+    "cycle": "2026",
+    "lat": 36.1623886,
+    "lng": -85.4997057
+  },
+  {
+    "name": "Dusty Jones",
+    "office": "State Representative",
+    "district": "District 49",
+    "photo": "",
+    "website": "",
+    "cycle": "2026",
+    "lat": 33.9984099,
+    "lng": -96.7198974
+  },
+  {
+    "name": "Nathan Brewer",
+    "office": "State Senate",
+    "district": "District 8",
+    "photo": "",
+    "website": "",
+    "cycle": "2026",
+    "lat": 35.4396625,
+    "lng": -95.9865145
+  },
+  {
+    "name": "Daniel Horoshak",
+    "office": "State Representative",
+    "district": "State representative 7b",
+    "photo": "",
+    "website": "",
+    "cycle": "2026",
+    "lat": 47.462761,
+    "lng": -92.538824
+  },
+  {
+    "name": "David Trumble",
+    "office": "State Senate",
+    "district": "District 8",
+    "photo": "",
+    "website": "",
+    "cycle": "2026",
+    "lat": 43.094966,
+    "lng": -71.73111
+  },
+  {
+    "name": "La Rhonda Odom",
+    "office": "State Representative",
+    "district": "District 48",
+    "photo": "",
+    "website": "",
+    "cycle": "2026",
+    "lat": 33.0576295,
+    "lng": -89.5875764
+  },
+  {
+    "name": "Siobhan McIntyre",
+    "office": "State Representative",
+    "district": "District 79",
+    "photo": "",
+    "website": "",
+    "cycle": "2026",
+    "lat": 37.2397486,
+    "lng": -96.9955919
+  },
+  {
+    "name": "John Bartlett",
+    "office": "State Representative",
+    "district": "District 33",
+    "photo": "",
+    "website": "",
+    "cycle": "2026",
+    "lat": 40.4511541,
+    "lng": -85.369972
+  },
+  {
+    "name": "Marc Bourassa",
+    "office": "State Representative",
+    "district": "Grafton District 10",
+    "photo": "",
+    "website": "",
+    "cycle": "2026",
+    "lat": 43.5912709,
+    "lng": -71.7361557
+  },
+  {
+    "name": "Jarvus Turnley",
+    "office": "State Representative",
+    "district": "District 66",
+    "photo": "",
+    "website": "",
+    "cycle": "2026",
+    "lat": 36.5092119,
+    "lng": -86.8849984
   }
 ]

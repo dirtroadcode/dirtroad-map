@@ -33,7 +33,8 @@ function officeCategory(office) {
 
 // --- Map setup ---
 
-const map = L.map('map').setView([39.8, -98.5], 4)
+const isMobile = window.innerWidth < 768
+const map = L.map('map').setView(isMobile ? [37, -80] : [39.8, -98.5], isMobile ? 4 : 4)
 
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
   maxZoom: 19,

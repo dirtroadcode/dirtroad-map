@@ -3,6 +3,9 @@ version = 1
 [[queue]]
 file = "load-real-candidate-data-and-geocode-locations.md"
 
+[[queue]]
+file = "live-google-sheets-integration-for-automatic-cohort-import.md"
+
 [[completed]]
 file = "project-scaffolding-initialize-vite-leaflet.md"
 

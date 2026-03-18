@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Candidates",
+  "description": "Array of candidate entries for the Dirtroad Organizing map",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "required": ["name", "office", "district", "cycle", "lat", "lng"],
+    "properties": {
+      "name": {
+        "type": "string",
+        "description": "Candidate's full name"
+      },
+      "office": {
+        "type": "string",
+        "description": "Office sought (e.g., State House, State Senate, County Commissioner)"
+      },
+      "district": {
+        "type": "string",
+        "description": "District name or number"
+      },
+      "photo": {
+        "type": "string",
+        "description": "URL to a thumbnail photo (empty string if not available)"
+      },
+      "website": {
+        "type": "string",
+        "description": "URL to campaign website"
+      },
+      "cycle": {
+        "type": "string",
+        "description": "Election cycle/year (e.g., 2024, 2026)"
+      },
+      "lat": {
+        "type": "number",
+        "description": "Latitude coordinate",
+        "minimum": -90,
+        "maximum": 90
+      },
+      "lng": {
+        "type": "number",
+        "description": "Longitude coordinate",
+        "minimum": -180,
+        "maximum": 180
+      }
+    },
+    "additionalProperties": false
+  }
+}

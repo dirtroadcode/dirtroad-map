@@ -63,7 +63,7 @@ Candidate coordinates will be determined using a one-time geocoding approach:
 
 - **Map only** — no header, title bar, or branding in the map itself (Squarespace page handles branding)
 - **Initial view**: Centered on the continental US, zoomed to show all markers
-- **Markers**: Colored circle markers, color-coded by office type (e.g., state house = blue, state senate = green, county = orange, etc.)
+- **Markers**: Colored circle markers, color-coded by office category — state = amber, county = teal, local = purple (avoiding red/blue for political neutrality)
 - **Popups**: On marker click, display candidate name, office, district, thumbnail photo, and campaign website link
 - **Map tiles**: OpenStreetMap (free, no API key)
 - **Responsive**: Must work well at various iframe sizes on desktop and mobile

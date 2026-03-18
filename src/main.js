@@ -6,6 +6,7 @@ import candidates from '../data/candidates.json'
 /** Map office strings from the data to display categories */
 const OFFICE_CATEGORY = {
   'State House': 'state',
+  'State Representative': 'state',
   'State Senate': 'state',
   'County Commissioner': 'county',
   'City Council': 'local',

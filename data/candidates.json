@@ -1,52 +1,182 @@
 [
   {
-    "name": "Maria Santos",
-    "office": "State House",
-    "district": "District 42",
-    "photo": "https://placehold.co/80x80?text=MS",
-    "website": "https://example.com/santos",
-    "cycle": "2026",
-    "lat": 33.749,
-    "lng": -84.388
-  },
-  {
-    "name": "James Whitfield",
-    "office": "State Senate",
-    "district": "District 15",
-    "photo": "https://placehold.co/80x80?text=JW",
-    "website": "https://example.com/whitfield",
-    "cycle": "2026",
-    "lat": 39.768,
-    "lng": -86.158
-  },
-  {
-    "name": "Priya Sharma",
+    "name": "Joan Presley",
     "office": "County Commissioner",
-    "district": "At-Large",
-    "photo": "https://placehold.co/80x80?text=PS",
-    "website": "https://example.com/sharma",
-    "cycle": "2026",
-    "lat": 35.227,
-    "lng": -80.843
-  },
-  {
-    "name": "Devon Carter",
-    "office": "City Council",
-    "district": "Ward 3",
+    "district": "Warren County",
     "photo": "",
-    "website": "https://example.com/carter",
+    "website": "",
     "cycle": "2026",
-    "lat": 42.331,
-    "lng": -83.046
+    "lat": 35.683404,
+    "lng": -85.7699816
   },
   {
-    "name": "Lisa Nakamura",
-    "office": "School Board",
-    "district": "Zone 2",
-    "photo": "https://placehold.co/80x80?text=LN",
-    "website": "https://example.com/nakamura",
+    "name": "Dustin Vigneault",
+    "office": "State Representative",
+    "district": "Haverhill, NH",
+    "photo": "",
+    "website": "",
     "cycle": "2026",
-    "lat": 29.76,
-    "lng": -95.37
+    "lat": 44.0342717,
+    "lng": -72.0634434
+  },
+  {
+    "name": "Charles Tilburg",
+    "office": "State Representative",
+    "district": "Buxton, ME",
+    "photo": "",
+    "website": "",
+    "cycle": "2026",
+    "lat": 43.612404,
+    "lng": -70.540878
+  },
+  {
+    "name": "Charly Ray",
+    "office": "State Senate",
+    "district": "Bayfield County, WI",
+    "photo": "",
+    "website": "",
+    "cycle": "2026",
+    "lat": 46.4710241,
+    "lng": -91.1983175
+  },
+  {
+    "name": "Kirstan Watson",
+    "office": "State Representative",
+    "district": "Arundel, ME",
+    "photo": "",
+    "website": "",
+    "cycle": "2026",
+    "lat": 43.3825857,
+    "lng": -70.4778292
+  },
+  {
+    "name": "Ali Simpson",
+    "office": "State Representative",
+    "district": "Ten Mile, TN",
+    "photo": "",
+    "website": "",
+    "cycle": "2026",
+    "lat": 35.6667394,
+    "lng": -84.6646604
+  },
+  {
+    "name": "Allen Davis",
+    "office": "State Representative",
+    "district": "Dublin, NH",
+    "photo": "",
+    "website": "",
+    "cycle": "2026",
+    "lat": 42.9059403,
+    "lng": -72.061978
+  },
+  {
+    "name": "Madison Cook",
+    "office": "State Representative",
+    "district": "Belfast, ME",
+    "photo": "",
+    "website": "",
+    "cycle": "2026",
+    "lat": 44.4261759,
+    "lng": -69.0065207
+  },
+  {
+    "name": "Reggie Spaulding",
+    "office": "State Representative",
+    "district": "Missoula, MT",
+    "photo": "",
+    "website": "",
+    "cycle": "2026",
+    "lat": 46.8701049,
+    "lng": -113.995267
+  },
+  {
+    "name": "Hannah Cole",
+    "office": "State Representative",
+    "district": "Teresita, OK",
+    "photo": "",
+    "website": "",
+    "cycle": "2026",
+    "lat": 36.1095351,
+    "lng": -94.9927351
+  },
+  {
+    "name": "Melanie Miller",
+    "office": "State Representative",
+    "district": "White Plains, GA",
+    "photo": "",
+    "website": "",
+    "cycle": "2026",
+    "lat": 33.4720779,
+    "lng": -83.035429
+  },
+  {
+    "name": "Chris Conroy",
+    "office": "State Representative",
+    "district": "Weare, NH",
+    "photo": "",
+    "website": "",
+    "cycle": "2026",
+    "lat": 43.094966,
+    "lng": -71.73111
+  },
+  {
+    "name": "Azalea Cormier",
+    "office": "State Representative",
+    "district": "Buckfield, ME",
+    "photo": "",
+    "website": "",
+    "cycle": "2026",
+    "lat": 44.2899492,
+    "lng": -70.3653651
+  },
+  {
+    "name": "Brittany Newton",
+    "office": "State Representative",
+    "district": "Whiteville, NC",
+    "photo": "",
+    "website": "",
+    "cycle": "2026",
+    "lat": 34.3217345,
+    "lng": -78.703148
+  },
+  {
+    "name": "Iva Markicevic Daley",
+    "office": "State Representative",
+    "district": "Sandy Hook, KY",
+    "photo": "",
+    "website": "",
+    "cycle": "2026",
+    "lat": 38.0864739,
+    "lng": -83.1262839
+  },
+  {
+    "name": "Steven Gupton",
+    "office": "School Board",
+    "district": "Louisburg",
+    "photo": "",
+    "website": "",
+    "cycle": "2026",
+    "lat": 36.0990393,
+    "lng": -78.301106
+  },
+  {
+    "name": "Bobbi Cummiskey",
+    "office": "City Council",
+    "district": "Bend",
+    "photo": "",
+    "website": "",
+    "cycle": "2026",
+    "lat": 44.0581728,
+    "lng": -121.3153096
+  },
+  {
+    "name": "Derek Hopkins",
+    "office": "State Representative",
+    "district": "Asheville, NC",
+    "photo": "",
+    "website": "",
+    "cycle": "2026",
+    "lat": 35.595363,
+    "lng": -82.5508407
   }
 ]

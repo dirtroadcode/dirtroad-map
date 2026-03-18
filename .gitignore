@@ -5,3 +5,4 @@ result
 *.swp
 *.swo
 .worktrees/
+test-embed.html

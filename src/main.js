@@ -40,7 +40,13 @@ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
 }).addTo(map)
 
+window.addEventListener('resize', () => map.invalidateSize())
+
 // --- Markers ---
+
+function popupMaxWidth() {
+  return Math.min(300, map.getContainer().clientWidth - 40)
+}
 
 function popupContent(c) {
   const photo = c.photo
@@ -62,7 +68,9 @@ candidates.forEach((c) => {
   const category = officeCategory(c.office)
   const style = CATEGORY_STYLES[category]
 
-  L.circleMarker([c.lat, c.lng], style).addTo(map).bindPopup(popupContent(c))
+  L.circleMarker([c.lat, c.lng], style)
+    .addTo(map)
+    .bindPopup(popupContent(c), { maxWidth: popupMaxWidth() })
 })
 
 // --- Legend ---

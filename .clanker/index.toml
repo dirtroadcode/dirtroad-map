@@ -1,9 +1,6 @@
 version = 1
 
 [[queue]]
-file = "responsive-iframe-embedding.md"
-
-[[queue]]
 file = "set-up-github-actions-deploy-to-github-pages.md"
 
 [[queue]]
@@ -23,3 +20,6 @@ file = "add-colored-candidate-markers-by-office-type.md"
 
 [[completed]]
 file = "add-marker-popups-with-candidate-details.md"
+
+[[completed]]
+file = "responsive-iframe-embedding.md"

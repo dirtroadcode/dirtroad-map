@@ -11,6 +11,7 @@ body,
 #map {
   width: 100%;
   height: 100%;
+  overflow: hidden;
 }
 
 .legend {
@@ -68,4 +69,37 @@ body,
 .popup-link {
   margin-top: 2px;
   color: #1a73e8;
+}
+
+/* Keep popups within the viewport in narrow iframes */
+.leaflet-popup-content-wrapper {
+  max-width: calc(100vw - 40px);
+}
+
+/* Smaller popups for narrow iframes (phone-width or sidebar widgets) */
+@media (max-width: 400px) {
+  .popup-card {
+    min-width: 100px;
+  }
+
+  .popup-photo {
+    width: 60px;
+    height: 60px;
+  }
+
+  .popup-name {
+    font-size: 13px;
+  }
+
+  .popup-office {
+    font-size: 12px;
+  }
+}
+
+/* Compact legend for tiny embeds */
+@media (max-width: 300px) {
+  .legend {
+    padding: 4px 8px;
+    font-size: 11px;
+  }
 }

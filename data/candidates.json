@@ -1,0 +1,52 @@
+[
+  {
+    "name": "Maria Santos",
+    "office": "State House",
+    "district": "District 42",
+    "photo": "https://placehold.co/80x80?text=MS",
+    "website": "https://example.com/santos",
+    "cycle": "2026",
+    "lat": 33.749,
+    "lng": -84.388
+  },
+  {
+    "name": "James Whitfield",
+    "office": "State Senate",
+    "district": "District 15",
+    "photo": "https://placehold.co/80x80?text=JW",
+    "website": "https://example.com/whitfield",
+    "cycle": "2026",
+    "lat": 39.768,
+    "lng": -86.158
+  },
+  {
+    "name": "Priya Sharma",
+    "office": "County Commissioner",
+    "district": "At-Large",
+    "photo": "https://placehold.co/80x80?text=PS",
+    "website": "https://example.com/sharma",
+    "cycle": "2026",
+    "lat": 35.227,
+    "lng": -80.843
+  },
+  {
+    "name": "Devon Carter",
+    "office": "City Council",
+    "district": "Ward 3",
+    "photo": "",
+    "website": "https://example.com/carter",
+    "cycle": "2026",
+    "lat": 42.331,
+    "lng": -83.046
+  },
+  {
+    "name": "Lisa Nakamura",
+    "office": "School Board",
+    "district": "Zone 2",
+    "photo": "https://placehold.co/80x80?text=LN",
+    "website": "https://example.com/nakamura",
+    "cycle": "2026",
+    "lat": 29.76,
+    "lng": -95.37
+  }
+]

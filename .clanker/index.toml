@@ -1,9 +1,6 @@
 version = 1
 
 [[queue]]
-file = "create-sample-candidate-data-and-json-schema.md"
-
-[[queue]]
 file = "build-the-base-leaflet-map.md"
 
 [[queue]]
@@ -23,3 +20,6 @@ file = "load-real-candidate-data-and-geocode-locations.md"
 
 [[completed]]
 file = "project-scaffolding-initialize-vite-leaflet.md"
+
+[[completed]]
+file = "create-sample-candidate-data-and-json-schema.md"

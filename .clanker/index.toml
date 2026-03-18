@@ -1,9 +1,6 @@
 version = 1
 
 [[queue]]
-file = "add-marker-popups-with-candidate-details.md"
-
-[[queue]]
 file = "responsive-iframe-embedding.md"
 
 [[queue]]
@@ -23,3 +20,6 @@ file = "build-the-base-leaflet-map.md"
 
 [[completed]]
 file = "add-colored-candidate-markers-by-office-type.md"
+
+[[completed]]
+file = "add-marker-popups-with-candidate-details.md"

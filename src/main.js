@@ -42,17 +42,27 @@ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
 // --- Markers ---
 
+function popupContent(c) {
+  const photo = c.photo
+    ? `<img class="popup-photo" src="${c.photo}" alt="${c.name}">`
+    : ''
+  const website = c.website
+    ? `<a class="popup-link" href="${c.website}" target="_blank" rel="noopener">Campaign website</a>`
+    : ''
+
+  return `<div class="popup-card">
+    ${photo}
+    <strong class="popup-name">${c.name}</strong>
+    <span class="popup-office">${c.office} &mdash; ${c.district}</span>
+    ${website}
+  </div>`
+}
+
 candidates.forEach((c) => {
   const category = officeCategory(c.office)
   const style = CATEGORY_STYLES[category]
 
-  L.circleMarker([c.lat, c.lng], style)
-    .addTo(map)
-    .bindPopup(
-      `<strong>${c.name}</strong><br>` +
-        `${c.office} &mdash; ${c.district}<br>` +
-        `<a href="${c.website}" target="_blank" rel="noopener">Campaign website</a>`,
-    )
+  L.circleMarker([c.lat, c.lng], style).addTo(map).bindPopup(popupContent(c))
 })
 
 // --- Legend ---

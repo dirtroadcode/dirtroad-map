@@ -1,0 +1,25 @@
+version = 1
+
+[[queue]]
+file = "create-sample-candidate-data-and-json-schema.md"
+
+[[queue]]
+file = "build-the-base-leaflet-map.md"
+
+[[queue]]
+file = "add-colored-candidate-markers-by-office-type.md"
+
+[[queue]]
+file = "add-marker-popups-with-candidate-details.md"
+
+[[queue]]
+file = "responsive-iframe-embedding.md"
+
+[[queue]]
+file = "set-up-github-actions-deploy-to-github-pages.md"
+
+[[queue]]
+file = "load-real-candidate-data-and-geocode-locations.md"
+
+[[completed]]
+file = "project-scaffolding-initialize-vite-leaflet.md"

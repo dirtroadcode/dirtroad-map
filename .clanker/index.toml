@@ -1,9 +1,6 @@
 version = 1
 
 [[queue]]
-file = "set-up-github-actions-deploy-to-github-pages.md"
-
-[[queue]]
 file = "load-real-candidate-data-and-geocode-locations.md"
 
 [[completed]]
@@ -23,3 +20,6 @@ file = "add-marker-popups-with-candidate-details.md"
 
 [[completed]]
 file = "responsive-iframe-embedding.md"
+
+[[completed]]
+file = "set-up-github-actions-deploy-to-github-pages.md"

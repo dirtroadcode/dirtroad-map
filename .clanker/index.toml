@@ -1,10 +1,10 @@
 version = 1
 
 [[queue]]
-file = "add-photos-for-all-candidates.md"
+file = "remove-obsolete-data-assets-from-repo.md"
 
 [[queue]]
-file = "remove-obsolete-data-assets-from-repo.md"
+file = "add-photos-for-all-candidates.md"
 
 [[completed]]
 file = "project-scaffolding-initialize-vite-leaflet.md"

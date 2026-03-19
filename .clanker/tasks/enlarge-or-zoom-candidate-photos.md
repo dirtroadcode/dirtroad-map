@@ -1,7 +1,6 @@
 ---
 type: feature
 title: Enlarge or zoom candidate photos
-added: '2026-03-19'
 finished: '2026-03-19'
 ---
 

@@ -1,7 +1,6 @@
 ---
 type: feature
 title: Live Google Sheets data source
-added: '2026-03-19'
 finished: '2026-03-19'
 ---
 

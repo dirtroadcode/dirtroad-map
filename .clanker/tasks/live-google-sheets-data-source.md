@@ -2,6 +2,7 @@
 type: feature
 title: Live Google Sheets data source
 added: '2026-03-19'
+finished: '2026-03-19'
 ---
 
 Move from static JSON to pulling candidate data live from a Google Spreadsheet published to the web. Since the upstream pipeline data is inconsistent in structure, create a new dedicated sheet for the map view where data is manually cleaned and maintained by a human.

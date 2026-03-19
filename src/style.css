@@ -71,7 +71,8 @@ a.popup-name:hover {
   text-decoration: underline;
 }
 
-.popup-office {
+.popup-office,
+.popup-detail {
   color: #555;
 }
 
@@ -95,7 +96,8 @@ a.popup-name:hover {
     font-size: 13px;
   }
 
-  .popup-office {
+  .popup-office,
+  .popup-detail {
     font-size: 12px;
   }
 }

@@ -1,5 +1,16 @@
 version = 1
-queue = []
+
+[[queue]]
+file = "link-candidate-name-to-website.md"
+
+[[queue]]
+file = "standardize-marker-popup-layout.md"
+
+[[queue]]
+file = "live-google-sheets-data-source.md"
+
+[[queue]]
+file = "add-photos-for-all-candidates.md"
 
 [[completed]]
 file = "project-scaffolding-initialize-vite-leaflet.md"

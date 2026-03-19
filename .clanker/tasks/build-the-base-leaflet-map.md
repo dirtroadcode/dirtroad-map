@@ -1,7 +1,6 @@
 ---
 type: feature
 title: Build the base Leaflet map
-added: '2026-03-17'
 finished: '2026-03-18'
 ---
 

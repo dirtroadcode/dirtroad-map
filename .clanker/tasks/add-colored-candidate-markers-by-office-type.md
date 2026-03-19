@@ -1,7 +1,6 @@
 ---
 type: feature
 title: Add colored candidate markers by office type
-added: '2026-03-17'
 finished: '2026-03-18'
 ---
 

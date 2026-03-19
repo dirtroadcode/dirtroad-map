@@ -1,7 +1,6 @@
 ---
 type: chore
 title: Set up GitHub Actions deploy to GitHub Pages
-added: '2026-03-17'
 finished: '2026-03-18'
 ---
 

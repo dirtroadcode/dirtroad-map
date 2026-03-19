@@ -1,7 +1,6 @@
 ---
 type: feature
 title: Add marker popups with candidate details
-added: '2026-03-17'
 finished: '2026-03-18'
 ---
 

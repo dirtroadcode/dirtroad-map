@@ -1,7 +1,6 @@
 ---
 type: chore
 title: Load real candidate data and geocode locations
-added: '2026-03-17'
 finished: '2026-03-18'
 ---
 

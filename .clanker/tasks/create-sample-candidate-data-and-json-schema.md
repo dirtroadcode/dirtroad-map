@@ -1,7 +1,6 @@
 ---
 type: chore
 title: Create sample candidate data and JSON schema
-added: '2026-03-17'
 finished: '2026-03-18'
 ---
 

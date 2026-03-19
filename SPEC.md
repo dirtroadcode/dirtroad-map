@@ -19,10 +19,9 @@ The MVP is a **static Leaflet map** with candidate data loaded from a JSON file 
 
 ### Out of Scope (for now)
 - User accounts or authentication (map is public, read-only)
-- Editing candidates from the map UI (all data managed in Google Sheets, exported to JSON)
+- Editing candidates from the map UI (all data managed in Google Sheets)
 - Filtering by election cycle/year
 - Marker clustering
-- Live Google Sheets integration
 
 ## Tech Stack
 
@@ -30,7 +29,7 @@ The MVP is a **static Leaflet map** with candidate data loaded from a JSON file 
 | --------------- | ------------------- | ------------------------------------------------------------ |
 | Map library     | Leaflet             | Lightweight, well-documented, standard for interactive maps  |
 | Build tool      | Vite (vanilla JS)   | Dev server with hot reload, clean production builds, no framework overhead |
-| Data format     | JSON file in repo   | Simple, version-controlled, no API keys needed for MVP       |
+| Data format     | Live CSV from Google Sheets | Published Google Sheet fetched at runtime, no API keys needed |
 | Hosting         | GitHub Pages        | Free static hosting, easy CI/CD with GitHub Actions          |
 | Embedding       | iframe              | Standard approach for Squarespace, most reliable             |
 | CI/CD           | GitHub Actions      | Auto-deploy to GitHub Pages on push to main                  |
@@ -53,7 +52,7 @@ Each candidate has the following fields:
 | lat         | number | yes      | Latitude coordinate                          |
 | lng         | number | yes      | Longitude coordinate                         |
 
-Candidate data lives in Google Sheets as the source of truth. For updates, export from Google Sheets, convert to JSON, commit to the repo, and push to deploy.
+Candidate data lives in a Google Sheet published to the web as CSV. The map fetches this CSV at runtime — no export, commit, or deploy needed for data changes.
 
 ### Geocoding
 
@@ -83,5 +82,4 @@ Candidate coordinates will be determined using a one-time geocoding approach:
 These are explicitly deferred but tracked for later:
 1. **Cycle filtering** — toggle between current and past election cycles
 2. **Marker clustering** — group nearby markers when zoomed out (Leaflet.markercluster)
-3. **Live Google Sheets integration** — pull data at build time via Sheets API
-4. **Party color-coding** — additional color dimension for party affiliation
+3. **Party color-coding** — additional color dimension for party affiliation

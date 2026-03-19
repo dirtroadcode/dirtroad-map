@@ -1,8 +1,11 @@
 import L from 'leaflet'
+import Papa from 'papaparse'
 import 'leaflet/dist/leaflet.css'
 import './style.css'
-import candidates from '../data/candidates.json'
 import usBoundary from '../data/us-boundary.json'
+
+const SHEET_CSV_URL =
+  'https://docs.google.com/spreadsheets/d/e/2PACX-1vTWI2J4Ft6P1WzimxGQ39K7XcbEQv-3H6T6B2mnmq1w_nIxSLK_01pRJlGIdCT-PdDQK2WeUh-Xer_l/pub?gid=1399665600&single=true&output=csv'
 
 /** Styles for each level's circleMarker */
 const CATEGORY_STYLES = {
@@ -84,13 +87,32 @@ function popupContent(c) {
   </div>`
 }
 
-candidates.forEach((c) => {
-  const style = CATEGORY_STYLES[c.level] ?? CATEGORY_STYLES.local
+async function fetchCandidates() {
+  const res = await fetch(SHEET_CSV_URL)
+  if (!res.ok) throw new Error(`Failed to fetch sheet: ${res.status}`)
+  const csv = await res.text()
+  const { data } = Papa.parse(csv, { header: true, skipEmptyLines: true })
+  return data.map((row) => ({
+    ...row,
+    lat: Number(row.lat),
+    lng: Number(row.lng),
+  }))
+}
 
-  L.circleMarker([c.lat, c.lng], style)
-    .addTo(map)
-    .bindPopup(popupContent(c), { maxWidth: popupMaxWidth() })
-})
+function addMarkers(candidates) {
+  candidates.forEach((c) => {
+    if (!c.lat || !c.lng) return
+    const style = CATEGORY_STYLES[c.level] ?? CATEGORY_STYLES.local
+
+    L.circleMarker([c.lat, c.lng], style)
+      .addTo(map)
+      .bindPopup(popupContent(c), { maxWidth: popupMaxWidth() })
+  })
+}
+
+fetchCandidates()
+  .then(addMarkers)
+  .catch((err) => console.error('Could not load candidate data:', err))
 
 // --- Legend ---
 

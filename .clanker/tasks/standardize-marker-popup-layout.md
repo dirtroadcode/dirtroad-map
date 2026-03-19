@@ -1,7 +1,6 @@
 ---
 type: bugfix
 title: Standardize marker popup layout
-added: '2026-03-19'
 finished: '2026-03-19'
 ---
 

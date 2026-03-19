@@ -1,7 +1,6 @@
 ---
 type: feature
 title: Link candidate name to website
-added: '2026-03-19'
 finished: '2026-03-19'
 ---
 

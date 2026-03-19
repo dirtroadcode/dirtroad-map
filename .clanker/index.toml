@@ -1,13 +1,13 @@
 version = 1
 
 [[queue]]
-file = "live-google-sheets-data-source.md"
+file = "enlarge-or-zoom-candidate-photos.md"
 
 [[queue]]
 file = "add-photos-for-all-candidates.md"
 
 [[queue]]
-file = "enlarge-or-zoom-candidate-photos.md"
+file = "remove-obsolete-data-assets-from-repo.md"
 
 [[completed]]
 file = "project-scaffolding-initialize-vite-leaflet.md"
@@ -41,3 +41,6 @@ file = "link-candidate-name-to-website.md"
 
 [[completed]]
 file = "standardize-marker-popup-layout.md"
+
+[[completed]]
+file = "live-google-sheets-data-source.md"

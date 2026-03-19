@@ -66,7 +66,7 @@ function popupMaxWidth() {
 
 function popupContent(c) {
   const photo = c.photo
-    ? `<img class="popup-photo" src="${c.photo}" alt="${c.name}">`
+    ? `<img class="popup-photo" src="${c.photo}" alt="${c.name}" role="button" tabindex="0">`
     : ''
   const name = c.website
     ? `<a class="popup-name" href="${c.website}" target="_blank" rel="noopener">${c.name}</a>`
@@ -135,3 +135,18 @@ legend.onAdd = function () {
 }
 
 legend.addTo(map)
+
+// --- Photo click-to-enlarge ---
+
+map.on('popupopen', (e) => {
+  const photo = e.popup.getElement().querySelector('.popup-photo')
+  if (!photo) return
+  photo.addEventListener('click', () => {
+    photo.classList.toggle('enlarged')
+    // Recalculate popup size/position without re-rendering content
+    // (popup.update() would reset the HTML and lose the .enlarged class)
+    e.popup._updateLayout()
+    e.popup._updatePosition()
+    e.popup._adjustPan()
+  })
+})

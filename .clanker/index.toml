@@ -1,9 +1,6 @@
 version = 1
 
 [[queue]]
-file = "remove-obsolete-data-assets-from-repo.md"
-
-[[queue]]
 file = "add-photos-for-all-candidates.md"
 
 [[completed]]
@@ -44,3 +41,6 @@ file = "live-google-sheets-data-source.md"
 
 [[completed]]
 file = "enlarge-or-zoom-candidate-photos.md"
+
+[[completed]]
+file = "remove-obsolete-data-assets-from-repo.md"

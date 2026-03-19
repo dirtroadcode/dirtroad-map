@@ -2,6 +2,7 @@
 type: chore
 title: Remove obsolete data assets from repo
 added: '2026-03-19'
+finished: '2026-03-19'
 ---
 
 Now that candidate data is live-loaded from a Google Sheet, identify and remove any static data files (JSON, CSV) still tracked in the repo, and consider pruning them from git history to reduce repo size.

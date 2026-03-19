@@ -62,13 +62,17 @@ body,
   font-size: 14px;
 }
 
-.popup-office {
-  color: #555;
+a.popup-name {
+  color: #1a73e8;
+  text-decoration: none;
 }
 
-.popup-link {
-  margin-top: 2px;
-  color: #1a73e8;
+a.popup-name:hover {
+  text-decoration: underline;
+}
+
+.popup-office {
+  color: #555;
 }
 
 /* Keep popups within the viewport in narrow iframes */

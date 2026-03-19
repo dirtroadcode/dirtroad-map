@@ -81,15 +81,14 @@ function popupContent(c) {
   const photo = c.photo
     ? `<img class="popup-photo" src="${c.photo}" alt="${c.name}">`
     : ''
-  const website = c.website
-    ? `<a class="popup-link" href="${c.website}" target="_blank" rel="noopener">Campaign website</a>`
-    : ''
+  const name = c.website
+    ? `<a class="popup-name" href="${c.website}" target="_blank" rel="noopener">${c.name}</a>`
+    : `<span class="popup-name">${c.name}</span>`
 
   return `<div class="popup-card">
     ${photo}
-    <strong class="popup-name">${c.name}</strong>
+    <strong>${name}</strong>
     <span class="popup-office">${c.office} &mdash; ${c.district}</span>
-    ${website}
   </div>`
 }
 

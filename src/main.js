@@ -4,19 +4,7 @@ import './style.css'
 import candidates from '../data/candidates.json'
 import usBoundary from '../data/us-boundary.json'
 
-/** Map office strings from the data to display categories */
-const OFFICE_CATEGORY = {
-  'State House': 'state',
-  'State Representative': 'state',
-  'State Senate': 'state',
-  'State Assembly': 'state',
-  'State Delegate': 'state',
-  'County Commissioner': 'county',
-  'City Council': 'local',
-  'School Board': 'local',
-}
-
-/** Styles for each category's circleMarker */
+/** Styles for each level's circleMarker */
 const CATEGORY_STYLES = {
   state: { color: '#C0690F', fillColor: '#E67E22', fillOpacity: 0.85, weight: 2, radius: 8 },
   county: { color: '#0E7A63', fillColor: '#16A085', fillOpacity: 0.85, weight: 2, radius: 8 },
@@ -28,10 +16,6 @@ const CATEGORY_LABELS = {
   state: 'State',
   county: 'County',
   local: 'Local',
-}
-
-function officeCategory(office) {
-  return OFFICE_CATEGORY[office] ?? 'local'
 }
 
 // --- Map setup ---
@@ -84,17 +68,24 @@ function popupContent(c) {
   const name = c.website
     ? `<a class="popup-name" href="${c.website}" target="_blank" rel="noopener">${c.name}</a>`
     : `<span class="popup-name">${c.name}</span>`
+  const district = c.district
+    ? `<span class="popup-detail">${c.district}</span>`
+    : ''
+  const state = c.state
+    ? `<span class="popup-detail">${c.state}</span>`
+    : ''
 
   return `<div class="popup-card">
     ${photo}
     <strong>${name}</strong>
-    <span class="popup-office">${c.office} &mdash; ${c.district}</span>
+    <span class="popup-office">${c.office}</span>
+    ${district}
+    ${state}
   </div>`
 }
 
 candidates.forEach((c) => {
-  const category = officeCategory(c.office)
-  const style = CATEGORY_STYLES[category]
+  const style = CATEGORY_STYLES[c.level] ?? CATEGORY_STYLES.local
 
   L.circleMarker([c.lat, c.lng], style)
     .addTo(map)

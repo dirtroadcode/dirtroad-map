@@ -4,7 +4,7 @@
 
 Dirtroad Organizing needs an interactive map of all their candidates, embedded on the org's Squarespace site via iframe. The map is hosted on GitHub Pages as a standalone page.
 
-The map displays candidate locations as colored circle markers (color-coded by office type). Clicking a marker shows a popup with the candidate's name, office sought, district, thumbnail photo, and a link to their campaign website.
+The map displays candidate locations as colored circle markers (color-coded by office level). Clicking a marker shows a popup with the candidate's name, office title, district, location (town/state), thumbnail photo, and a link to their campaign website.
 
 ## MVP Scope
 
@@ -39,16 +39,19 @@ The MVP is a **static Leaflet map** with candidate data loaded from a JSON file 
 
 Each candidate has the following fields:
 
-| Field       | Type   | Description                                  |
-| ----------- | ------ | -------------------------------------------- |
-| name        | string | Candidate's full name                        |
-| office      | string | Office sought (e.g., "State House", "County Commissioner") |
-| district    | string | District name or number                      |
-| photo       | string | URL to a thumbnail photo                     |
-| website     | string | URL to campaign website                      |
-| cycle       | string | Election cycle/year (e.g., "2024", "2026")   |
-| lat         | number | Latitude coordinate                          |
-| lng         | number | Longitude coordinate                         |
+| Field       | Type   | Required | Description                                  |
+| ----------- | ------ | -------- | -------------------------------------------- |
+| name        | string | yes      | Candidate's full name                        |
+| level       | string | yes      | Office level: "state", "county", or "local" — drives marker color |
+| office      | string | yes      | Office title for display (e.g., "State Representative", "County Commissioner") |
+| district    | string | no       | District identifier, displayed as-is (e.g., "District 42", "Deschutes County") |
+| town        | string | no       | Town or city name                            |
+| state       | string | no       | Full state name (e.g., "Maine", "Tennessee") |
+| photo       | string | no       | URL to a thumbnail photo                     |
+| website     | string | no       | URL to campaign website                      |
+| cycle       | string | yes      | Election cycle/year (e.g., "2024", "2026")   |
+| lat         | number | yes      | Latitude coordinate                          |
+| lng         | number | yes      | Longitude coordinate                         |
 
 Candidate data lives in Google Sheets as the source of truth. For updates, export from Google Sheets, convert to JSON, commit to the repo, and push to deploy.
 
@@ -63,8 +66,8 @@ Candidate coordinates will be determined using a one-time geocoding approach:
 
 - **Map only** — no header, title bar, or branding in the map itself (Squarespace page handles branding)
 - **Initial view**: Centered on the continental US, zoomed to show all markers
-- **Markers**: Colored circle markers, color-coded by office category — state = amber, county = teal, local = purple (avoiding red/blue for political neutrality)
-- **Popups**: On marker click, display candidate name, office, district, thumbnail photo, and campaign website link
+- **Markers**: Colored circle markers, color-coded by office level — state = amber, county = teal, local = purple (avoiding red/blue for political neutrality)
+- **Popups**: On marker click, display candidate name (linked to website), office title, district, town/state, and thumbnail photo
 - **Map tiles**: OpenStreetMap (free, no API key)
 - **Responsive**: Must work well at various iframe sizes on desktop and mobile
 

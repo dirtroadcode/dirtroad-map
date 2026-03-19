@@ -1,9 +1,6 @@
 version = 1
 
 [[queue]]
-file = "standardize-marker-popup-layout.md"
-
-[[queue]]
 file = "live-google-sheets-data-source.md"
 
 [[queue]]
@@ -38,3 +35,6 @@ file = "live-google-sheets-integration-for-automatic-cohort-import.md"
 
 [[completed]]
 file = "link-candidate-name-to-website.md"
+
+[[completed]]
+file = "standardize-marker-popup-layout.md"

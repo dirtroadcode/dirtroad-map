@@ -2,6 +2,7 @@
 type: bugfix
 title: Standardize marker popup layout
 added: '2026-03-19'
+finished: '2026-03-19'
 ---
 
 Popup blurbs are inconsistent — some candidates show state, some don't, and the info layout varies. Standardize all popups to a consistent structure: bold name, then level of office, district number, town, and state on subsequent lines.

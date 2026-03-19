@@ -5,19 +5,32 @@
   "type": "array",
   "items": {
     "type": "object",
-    "required": ["name", "office", "district", "cycle", "lat", "lng"],
+    "required": ["name", "level", "office", "cycle", "lat", "lng"],
     "properties": {
       "name": {
         "type": "string",
         "description": "Candidate's full name"
       },
+      "level": {
+        "type": "string",
+        "enum": ["state", "county", "local"],
+        "description": "Office level — drives marker color (state, county, or local)"
+      },
       "office": {
         "type": "string",
-        "description": "Office sought (e.g., State House, State Senate, County Commissioner)"
+        "description": "Office title for display (e.g., State Representative, County Commissioner)"
       },
       "district": {
         "type": "string",
-        "description": "District name or number"
+        "description": "District identifier displayed as-is (e.g., District 42, Deschutes County)"
+      },
+      "town": {
+        "type": "string",
+        "description": "Town or city name"
+      },
+      "state": {
+        "type": "string",
+        "description": "Full state name (e.g., Maine, Tennessee)"
       },
       "photo": {
         "type": "string",

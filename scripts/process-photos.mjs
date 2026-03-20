@@ -197,7 +197,7 @@ async function main() {
 
   // 6. URL list matching spreadsheet row order (paste directly into photo column)
   const urlByName = new Map(results.map(({ name, url }) => [name, url]))
-  const spreadsheetOrder = candidates.map((c) => c.name)
+  const spreadsheetOrder = candidates.map((c) => c.name).sort((a, b) => a.localeCompare(b))
 
   console.log('\n' + '='.repeat(60))
   console.log('PASTE INTO PHOTO COLUMN (matches spreadsheet row order):')

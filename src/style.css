@@ -64,6 +64,12 @@ body,
   height: 200px;
 }
 
+.popup-divider {
+  border: none;
+  border-top: 1px solid #ddd;
+  margin: 8px 0;
+}
+
 .popup-name {
   font-size: 14px;
 }

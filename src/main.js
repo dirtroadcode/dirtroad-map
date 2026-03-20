@@ -81,9 +81,9 @@ function candidateCard(c) {
   return `<div class="popup-card">
     ${photo}
     <strong>${name}</strong>
+    ${state}
     <span class="popup-office">${c.office}</span>
     ${district}
-    ${state}
   </div>`
 }
 

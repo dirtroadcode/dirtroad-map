@@ -1,7 +1,6 @@
 ---
 type: chore
 title: Remove obsolete data assets from repo
-added: '2026-03-19'
 finished: '2026-03-19'
 ---
 

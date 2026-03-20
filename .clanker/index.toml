@@ -1,7 +1,5 @@
 version = 1
-
-[[queue]]
-file = "add-photos-for-all-candidates.md"
+queue = []
 
 [[completed]]
 file = "project-scaffolding-initialize-vite-leaflet.md"
@@ -47,3 +45,6 @@ file = "remove-obsolete-data-assets-from-repo.md"
 
 [[completed]]
 file = "jamie-collins-not-showing-on-map.md"
+
+[[completed]]
+file = "add-photos-for-all-candidates.md"

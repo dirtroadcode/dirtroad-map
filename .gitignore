@@ -6,3 +6,4 @@ result
 *.swo
 .worktrees/
 test-embed.html
+assets/

@@ -1,7 +1,5 @@
 version = 1
-
-[[queue]]
-file = "reorder-popup-state-below-name.md"
+queue = []
 
 [[completed]]
 file = "project-scaffolding-initialize-vite-leaflet.md"
@@ -50,3 +48,6 @@ file = "jamie-collins-not-showing-on-map.md"
 
 [[completed]]
 file = "add-photos-for-all-candidates.md"
+
+[[completed]]
+file = "reorder-popup-state-below-name.md"

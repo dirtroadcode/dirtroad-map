@@ -195,13 +195,15 @@ async function main() {
     }
   }
 
-  // 6. URL mapping table for spreadsheet
+  // 6. URL list matching spreadsheet row order (paste directly into photo column)
+  const urlByName = new Map(results.map(({ name, url }) => [name, url]))
+  const spreadsheetOrder = candidates.map((c) => c.name)
+
   console.log('\n' + '='.repeat(60))
-  console.log('SPREADSHEET URLs — paste into the photo column:')
+  console.log('PASTE INTO PHOTO COLUMN (matches spreadsheet row order):')
   console.log('='.repeat(60))
-  results.sort((a, b) => a.name.localeCompare(b.name))
-  for (const { name, url } of results) {
-    console.log(`${name}\t${url}`)
+  for (const name of spreadsheetOrder) {
+    console.log(urlByName.get(name) || '')
   }
   console.log()
 

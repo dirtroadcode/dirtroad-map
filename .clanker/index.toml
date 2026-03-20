@@ -1,9 +1,6 @@
 version = 1
 
 [[queue]]
-file = "jamie-collins-not-showing-on-map.md"
-
-[[queue]]
 file = "add-photos-for-all-candidates.md"
 
 [[completed]]
@@ -47,3 +44,6 @@ file = "enlarge-or-zoom-candidate-photos.md"
 
 [[completed]]
 file = "remove-obsolete-data-assets-from-repo.md"
+
+[[completed]]
+file = "jamie-collins-not-showing-on-map.md"

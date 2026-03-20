@@ -64,7 +64,7 @@ function popupMaxWidth() {
   return Math.min(300, map.getContainer().clientWidth - 40)
 }
 
-function popupContent(c) {
+function candidateCard(c) {
   const photo = c.photo
     ? `<img class="popup-photo" src="${c.photo}" alt="${c.name}" role="button" tabindex="0">`
     : ''
@@ -87,6 +87,10 @@ function popupContent(c) {
   </div>`
 }
 
+function popupContent(candidates) {
+  return candidates.map(candidateCard).join('<hr class="popup-divider">')
+}
+
 async function fetchCandidates() {
   const res = await fetch(SHEET_CSV_URL)
   if (!res.ok) throw new Error(`Failed to fetch sheet: ${res.status}`)
@@ -99,15 +103,31 @@ async function fetchCandidates() {
   }))
 }
 
-function addMarkers(candidates) {
-  candidates.forEach((c) => {
-    if (!c.lat || !c.lng) return
-    const style = CATEGORY_STYLES[c.level] ?? CATEGORY_STYLES.local
+const LEVEL_PRIORITY = { state: 0, county: 1, local: 2 }
 
-    L.circleMarker([c.lat, c.lng], style)
+function addMarkers(candidates) {
+  // Group candidates that share the same coordinates
+  const groups = new Map()
+  for (const c of candidates) {
+    if (!c.lat || !c.lng) continue
+    const key = `${c.lat},${c.lng}`
+    if (!groups.has(key)) groups.set(key, [])
+    groups.get(key).push(c)
+  }
+
+  for (const [, group] of groups) {
+    const { lat, lng } = group[0]
+    // Use the highest-priority level for the marker color
+    const topLevel = group.reduce(
+      (best, c) => ((LEVEL_PRIORITY[c.level] ?? 2) < (LEVEL_PRIORITY[best] ?? 2) ? c.level : best),
+      group[0].level,
+    )
+    const style = CATEGORY_STYLES[topLevel] ?? CATEGORY_STYLES.local
+
+    L.circleMarker([lat, lng], style)
       .addTo(map)
-      .bindPopup(popupContent(c), { maxWidth: popupMaxWidth() })
-  })
+      .bindPopup(popupContent(group), { maxWidth: popupMaxWidth() })
+  }
 }
 
 fetchCandidates()
@@ -139,14 +159,13 @@ legend.addTo(map)
 // --- Photo click-to-enlarge ---
 
 map.on('popupopen', (e) => {
-  const photo = e.popup.getElement().querySelector('.popup-photo')
-  if (!photo) return
-  photo.addEventListener('click', () => {
-    photo.classList.toggle('enlarged')
-    // Recalculate popup size/position without re-rendering content
-    // (popup.update() would reset the HTML and lose the .enlarged class)
-    e.popup._updateLayout()
-    e.popup._updatePosition()
-    e.popup._adjustPan()
+  const photos = e.popup.getElement().querySelectorAll('.popup-photo')
+  photos.forEach((photo) => {
+    photo.addEventListener('click', () => {
+      photo.classList.toggle('enlarged')
+      e.popup._updateLayout()
+      e.popup._updatePosition()
+      e.popup._adjustPan()
+    })
   })
 })

@@ -82,7 +82,7 @@ async function downloadPhoto(url, outputPath) {
 
 async function processPhoto(inputPath, outputPath) {
   await sharp(inputPath)
-    .resize(SIZE, SIZE, { fit: 'cover', position: 'centre' })
+    .resize(SIZE, SIZE, { fit: 'cover', position: 'top' })
     .webp({ quality: QUALITY })
     .toFile(outputPath)
 }

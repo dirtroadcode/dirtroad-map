@@ -53,9 +53,8 @@ body,
 
 .popup-photo {
   width: 200px;
-  height: 200px;
+  height: auto;
   border-radius: 4px;
-  object-fit: cover;
 }
 
 .popup-divider {
@@ -95,7 +94,7 @@ a.popup-name:hover {
 
   .popup-photo {
     width: 160px;
-    height: 160px;
+    height: auto;
   }
 
   .popup-name {

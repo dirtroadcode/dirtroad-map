@@ -1,5 +1,13 @@
 version = 1
-queue = []
+
+[[queue]]
+file = "differentiate-coordinates-by-district.md"
+
+[[queue]]
+file = "backfill-missing-cohort-members.md"
+
+[[queue]]
+file = "enlarge-candidate-photos-remove-resize.md"
 
 [[completed]]
 file = "project-scaffolding-initialize-vite-leaflet.md"

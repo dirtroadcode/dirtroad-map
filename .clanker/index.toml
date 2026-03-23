@@ -3,9 +3,6 @@ version = 1
 [[queue]]
 file = "process-new-candidate-photos.md"
 
-[[queue]]
-file = "differentiate-coordinates-by-district.md"
-
 [[completed]]
 file = "project-scaffolding-initialize-vite-leaflet.md"
 
@@ -62,3 +59,6 @@ file = "enlarge-candidate-photos-remove-resize.md"
 
 [[completed]]
 file = "backfill-missing-cohort-members.md"
+
+[[completed]]
+file = "differentiate-coordinates-by-district.md"

@@ -37,6 +37,7 @@ const MANUAL_OVERRIDES = {
   "Thomas O'Donnell.jpeg": "Tom O'Donnell",
   'Benjamin Schaeur.jpg': 'Benjamin Schauer',
   'Kathyrn Larson.jpg': 'Kathryn Larson',
+  'Jacob-Brooks-908x1024.jpg': 'Jacob Brooks',
 }
 
 // --- Helpers ---

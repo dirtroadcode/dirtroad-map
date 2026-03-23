@@ -2,6 +2,7 @@
 type: feature
 title: Backfill missing cohort members
 added: '2026-03-20'
+finished: '2026-03-23'
 ---
 
 Check for missing cohort members in the candidate data and get them backfilled.

@@ -3,9 +3,6 @@ version = 1
 [[queue]]
 file = "differentiate-coordinates-by-district.md"
 
-[[queue]]
-file = "backfill-missing-cohort-members.md"
-
 [[completed]]
 file = "project-scaffolding-initialize-vite-leaflet.md"
 
@@ -59,3 +56,6 @@ file = "reorder-popup-state-below-name.md"
 
 [[completed]]
 file = "enlarge-candidate-photos-remove-resize.md"
+
+[[completed]]
+file = "backfill-missing-cohort-members.md"

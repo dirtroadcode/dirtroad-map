@@ -1,7 +1,5 @@
 version = 1
-
-[[queue]]
-file = "recenter-viewport-on-marker-click.md"
+queue = []
 
 [[completed]]
 file = "project-scaffolding-initialize-vite-leaflet.md"
@@ -65,3 +63,6 @@ file = "differentiate-coordinates-by-district.md"
 
 [[completed]]
 file = "process-new-candidate-photos.md"
+
+[[completed]]
+file = "recenter-viewport-on-marker-click.md"

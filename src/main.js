@@ -124,9 +124,15 @@ function addMarkers(candidates) {
     )
     const style = CATEGORY_STYLES[topLevel] ?? CATEGORY_STYLES.local
 
-    L.circleMarker([lat, lng], style)
+    const marker = L.circleMarker([lat, lng], style)
       .addTo(map)
-      .bindPopup(popupContent(group), { maxWidth: popupMaxWidth() })
+      .bindPopup(popupContent(group), { maxWidth: popupMaxWidth(), autoPan: false })
+
+    marker.on('click', () => {
+      const px = map.latLngToContainerPoint(marker.getLatLng())
+      const target = map.containerPointToLatLng(px.subtract([0, map.getSize().y / 10]))
+      map.panTo(target, { animate: true, duration: 0.25 })
+    })
   }
 }
 

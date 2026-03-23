@@ -2,6 +2,7 @@
 type: feature
 title: Recenter viewport on marker click
 added: '2026-03-23'
+finished: '2026-03-23'
 ---
 
 Clicking a map marker should recenter the viewport so the popup is fully visible without scrolling.

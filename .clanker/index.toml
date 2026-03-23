@@ -1,5 +1,7 @@
 version = 1
-queue = []
+
+[[queue]]
+file = "recenter-viewport-on-marker-click.md"
 
 [[completed]]
 file = "project-scaffolding-initialize-vite-leaflet.md"

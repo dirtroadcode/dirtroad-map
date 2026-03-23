@@ -6,9 +6,6 @@ file = "differentiate-coordinates-by-district.md"
 [[queue]]
 file = "backfill-missing-cohort-members.md"
 
-[[queue]]
-file = "enlarge-candidate-photos-remove-resize.md"
-
 [[completed]]
 file = "project-scaffolding-initialize-vite-leaflet.md"
 
@@ -59,3 +56,6 @@ file = "add-photos-for-all-candidates.md"
 
 [[completed]]
 file = "reorder-popup-state-below-name.md"
+
+[[completed]]
+file = "enlarge-candidate-photos-remove-resize.md"

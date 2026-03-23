@@ -66,7 +66,7 @@ function popupMaxWidth() {
 
 function candidateCard(c) {
   const photo = c.photo
-    ? `<img class="popup-photo" src="${c.photo}" alt="${c.name}" role="button" tabindex="0">`
+    ? `<img class="popup-photo" src="${c.photo}" alt="${c.name}">`
     : ''
   const name = c.website
     ? `<a class="popup-name" href="${c.website}" target="_blank" rel="noopener">${c.name}</a>`
@@ -156,16 +156,3 @@ legend.onAdd = function () {
 
 legend.addTo(map)
 
-// --- Photo click-to-enlarge ---
-
-map.on('popupopen', (e) => {
-  const photos = e.popup.getElement().querySelectorAll('.popup-photo')
-  photos.forEach((photo) => {
-    photo.addEventListener('click', () => {
-      photo.classList.toggle('enlarged')
-      e.popup._updateLayout()
-      e.popup._updatePosition()
-      e.popup._adjustPan()
-    })
-  })
-})

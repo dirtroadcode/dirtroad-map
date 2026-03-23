@@ -56,12 +56,13 @@ body,
   height: 80px;
   border-radius: 4px;
   object-fit: cover;
+  object-position: top;
   cursor: pointer;
 }
 
 .popup-photo.enlarged {
   width: 200px;
-  height: 200px;
+  height: auto;
 }
 
 .popup-divider {
@@ -102,11 +103,12 @@ a.popup-name:hover {
   .popup-photo {
     width: 60px;
     height: 60px;
+    object-position: top;
   }
 
   .popup-photo.enlarged {
     width: 160px;
-    height: 160px;
+    height: auto;
   }
 
   .popup-name {

@@ -52,16 +52,10 @@ body,
 }
 
 .popup-photo {
-  width: 80px;
-  height: 80px;
-  border-radius: 4px;
-  object-fit: cover;
-  cursor: pointer;
-}
-
-.popup-photo.enlarged {
   width: 200px;
   height: 200px;
+  border-radius: 4px;
+  object-fit: cover;
 }
 
 .popup-divider {
@@ -100,11 +94,6 @@ a.popup-name:hover {
   }
 
   .popup-photo {
-    width: 60px;
-    height: 60px;
-  }
-
-  .popup-photo.enlarged {
     width: 160px;
     height: 160px;
   }

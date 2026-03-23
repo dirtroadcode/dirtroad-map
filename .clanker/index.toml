@@ -1,6 +1,9 @@
 version = 1
 
 [[queue]]
+file = "process-new-candidate-photos.md"
+
+[[queue]]
 file = "differentiate-coordinates-by-district.md"
 
 [[completed]]

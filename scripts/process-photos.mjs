@@ -35,6 +35,8 @@ const MANUAL_OVERRIDES = {
   'joan pressley.jpg': 'Joan Harris Presley',
   'Iva.jpg': 'Iva Markicevic Daley',
   "Thomas O'Donnell.jpeg": "Tom O'Donnell",
+  'Benjamin Schaeur.jpg': 'Benjamin Schauer',
+  'Kathyrn Larson.jpg': 'Kathryn Larson',
 }
 
 // --- Helpers ---

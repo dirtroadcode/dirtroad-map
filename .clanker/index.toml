@@ -1,7 +1,5 @@
 version = 1
-
-[[queue]]
-file = "process-new-candidate-photos.md"
+queue = []
 
 [[completed]]
 file = "project-scaffolding-initialize-vite-leaflet.md"
@@ -62,3 +60,6 @@ file = "backfill-missing-cohort-members.md"
 
 [[completed]]
 file = "differentiate-coordinates-by-district.md"
+
+[[completed]]
+file = "process-new-candidate-photos.md"

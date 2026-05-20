@@ -3,6 +3,7 @@ import Papa from 'papaparse'
 import 'leaflet/dist/leaflet.css'
 import './style.css'
 import usBoundary from '../data/us-boundary.json'
+import { startKiosk } from './kiosk.js'
 
 const SHEET_CSV_URL =
   'https://docs.google.com/spreadsheets/d/e/2PACX-1vTWI2J4Ft6P1WzimxGQ39K7XcbEQv-3H6T6B2mnmq1w_nIxSLK_01pRJlGIdCT-PdDQK2WeUh-Xer_l/pub?gid=1399665600&single=true&output=csv'
@@ -115,6 +116,8 @@ function addMarkers(candidates) {
     groups.get(key).push(c)
   }
 
+  const markers = []
+
   for (const [, group] of groups) {
     const { lat, lng } = group[0]
     // Use the highest-priority level for the marker color
@@ -133,11 +136,18 @@ function addMarkers(candidates) {
       const target = map.containerPointToLatLng(px.subtract([0, map.getSize().y / 10]))
       map.panTo(target, { animate: true, duration: 0.25 })
     })
+
+    markers.push(marker)
   }
+
+  return markers
 }
 
 fetchCandidates()
-  .then(addMarkers)
+  .then((candidates) => {
+    const markers = addMarkers(candidates)
+    startKiosk(map, markers)
+  })
   .catch((err) => console.error('Could not load candidate data:', err))
 
 // --- Legend ---

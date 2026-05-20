@@ -7,7 +7,9 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "photos": "node scripts/process-photos.mjs"
+    "photos": "node scripts/process-photos.mjs",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "leaflet": "^1.9.4",
@@ -15,6 +17,7 @@
   },
   "devDependencies": {
     "sharp": "^0.34.5",
-    "vite": "^8.0.0"
+    "vite": "^8.0.0",
+    "vitest": "^4.1.7"
   }
 }

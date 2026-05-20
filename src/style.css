@@ -81,6 +81,10 @@ a.popup-name:hover {
   color: #555;
 }
 
+.leaflet-control-attribution {
+  display: none;
+}
+
 /* Keep popups within the viewport in narrow iframes */
 .leaflet-popup-content-wrapper {
   max-width: calc(100vw - 40px);

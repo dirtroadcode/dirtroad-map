@@ -57,7 +57,7 @@ export function startKiosk(map, markers) {
 
     // Offset pan target up by 10% of viewport so popup doesn't cover marker
     const px = map.latLngToContainerPoint(target)
-    const offsetTarget = map.containerPointToLatLng(px.subtract([0, map.getSize().y / 10]))
+    const offsetTarget = map.containerPointToLatLng(px.subtract([0, map.getSize().y / 4]))
 
     map.panTo(offsetTarget, { animate: true, duration })
 

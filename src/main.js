@@ -133,7 +133,7 @@ function addMarkers(candidates) {
 
     marker.on('click', () => {
       const px = map.latLngToContainerPoint(marker.getLatLng())
-      const target = map.containerPointToLatLng(px.subtract([0, map.getSize().y / 10]))
+      const target = map.containerPointToLatLng(px.subtract([0, map.getSize().y / 4]))
       map.panTo(target, { animate: true, duration: 0.25 })
     })
 

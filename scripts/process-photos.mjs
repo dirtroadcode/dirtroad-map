@@ -38,6 +38,7 @@ const MANUAL_OVERRIDES = {
   'Benjamin Schaeur.jpg': 'Benjamin Schauer',
   'Kathyrn Larson.jpg': 'Kathryn Larson',
   'Jacob-Brooks-908x1024.jpg': 'Jacob Brooks',
+  'mira-tanner-hughes.jpg': 'Mira Tanner-Hughes',
 }
 
 // --- Helpers ---

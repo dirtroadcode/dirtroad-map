@@ -61,5 +61,12 @@ export function initMap({ container }) {
     attributionControl: false,
   })
 
+  map.scrollZoom.disable()
+
+  map.on('click', () => {
+    map.scrollZoom.enable()
+    container.classList.add('map-interactive')
+  })
+
   return map
 }

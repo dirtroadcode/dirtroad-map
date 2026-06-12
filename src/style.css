@@ -22,3 +22,20 @@ body,
 .maplibregl-map {
   background: transparent !important;
 }
+
+/* Click-to-activate indicator */
+#map:not(.map-interactive) {
+  cursor: pointer;
+}
+
+#map:not(.map-interactive):hover {
+  box-shadow: inset 0 0 20px rgba(245, 197, 24, 0.3);
+}
+
+#map.map-interactive {
+  cursor: grab;
+}
+
+#map.map-interactive:active {
+  cursor: grabbing;
+}

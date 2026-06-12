@@ -13,13 +13,19 @@ export const COLORS = {
 const LEVELS = ['state', 'county', 'local']
 
 /**
- * Fetch candidate CSV, build grouped GeoJSON, and add glow marker layers to the map.
+ * Fetch candidate CSV, build grouped GeoJSON, and add marker layers to the map.
  * @param {maplibregl.Map} map
  */
-export async function addMarkerLayers(map) {
-  const res = await fetch(SHEET_URL)
-  if (!res.ok) throw new Error(`Sheet fetch failed: ${res.status}`)
-  const csvText = await res.text()
+export function fetchCandidateCSV() {
+  return fetch(SHEET_URL)
+    .then(res => {
+      if (!res.ok) throw new Error(`Sheet fetch failed: ${res.status}`)
+      return res.text()
+    })
+}
+
+export async function addMarkerLayers(map, csvPromise) {
+  const csvText = await csvPromise
   const geojson = buildMarkerGeoJSON(csvText)
 
   map.addSource('candidates', {
@@ -30,24 +36,7 @@ export async function addMarkerLayers(map) {
   for (const level of LEVELS) {
     const color = COLORS[level]
 
-    // Outer glow halo
-    map.addLayer({
-      id: `candidates-${level}-glow`,
-      type: 'circle',
-      source: 'candidates',
-      filter: ['==', ['get', 'level'], level],
-      paint: {
-        'circle-radius': [
-          'interpolate', ['linear'], ['zoom'],
-          3, 8, 8, 16,
-        ],
-        'circle-color': color,
-        'circle-opacity': 0.25,
-        'circle-blur': 1,
-      },
-    })
-
-    // Bright center dot
+    // Candidate dot
     map.addLayer({
       id: `candidates-${level}-dot`,
       type: 'circle',

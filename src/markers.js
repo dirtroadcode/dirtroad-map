@@ -60,9 +60,16 @@ export async function addMarkerLayers(map) {
         ],
         'circle-color': color,
         'circle-opacity': 1,
+        'circle-stroke-width': [
+          'case', ['boolean', ['feature-state', 'highlight'], false],
+          3, 0,
+        ],
+        'circle-stroke-color': '#ffffff',
       },
     })
   }
+
+  return geojson
 }
 
 /**
@@ -104,7 +111,8 @@ export function buildMarkerGeoJSON(csvText) {
 
   return {
     type: 'FeatureCollection',
-    features: [...groups.values()].map(g => ({
+    features: [...groups.values()].map((g, i) => ({
+      id: i,
       type: 'Feature',
       geometry: { type: 'Point', coordinates: [g.lng, g.lat] },
       properties: {

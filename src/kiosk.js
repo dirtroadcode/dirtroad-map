@@ -5,8 +5,8 @@ import { renderPopupContent } from './popupRenderer.js'
 const INITIAL_HOLD_MS = 2000
 const POPUP_HOLD_MS = 5000
 const PAUSE_MS = 500
-const DURATION_MIN_MS = 3000
-const DURATION_MAX_MS = 8000
+const DURATION_MIN_MS = 4000
+const DURATION_MAX_MS = 12000
 
 /**
  * Calculate fly duration in ms based on distance between two points.
@@ -126,9 +126,9 @@ export function startKiosk(map, geojson) {
 
     map.flyTo({
       center: [lng, lat],
-      zoom: 12,
+      zoom: 8,
       curve: 1.42,
-      speed: duration / 1000,
+      duration,
       padding: { top: 80, bottom: 0, left: 0, right: 0 },
       easing(t) { return t },
     })

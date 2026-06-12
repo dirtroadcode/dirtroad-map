@@ -1,0 +1,1 @@
+/home/yomi/code/clanker/packages/clanker-pi/agents/demo-capturer.md

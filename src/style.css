@@ -129,23 +129,19 @@ a.popup-name:hover {
   height: 12px;
   border-radius: 50%;
   flex-shrink: 0;
-  box-shadow: 0 0 8px 2px currentColor;
   opacity: 0.9;
 }
 
 .legend-item[data-level="state"] .legend-swatch {
   color: #F5C518;
-  box-shadow: 0 0 8px 2px #F5C518;
 }
 
 .legend-item[data-level="county"] .legend-swatch {
   color: #B87333;
-  box-shadow: 0 0 8px 2px #B87333;
 }
 
 .legend-item[data-level="local"] .legend-swatch {
   color: #7A9E7E;
-  box-shadow: 0 0 8px 2px #7A9E7E;
 }
 
 @media (max-width: 768px) {

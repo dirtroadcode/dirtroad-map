@@ -1,0 +1,13 @@
+{
+  "packages": [
+    "/home/yomi/code/clanker/packages/clanker-pi"
+  ],
+  "clanker": {
+    "forge": {
+      "type": "github",
+      "url": "https://github.com/",
+      "repo": "dirtroadcode/dirtroad-map",
+      "token": "GH_TOKEN"
+    }
+  }
+}

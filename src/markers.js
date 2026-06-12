@@ -84,11 +84,19 @@ export function buildMarkerGeoJSON(csvText) {
 
     const key = `${lat},${lng}`
     if (!groups.has(key)) {
-      groups.set(key, { lat, lng, level: row.level, names: [], count: 0 })
+      groups.set(key, { lat, lng, level: row.level, candidates: [] })
     }
     const g = groups.get(key)
-    g.names.push(row.name)
-    g.count++
+    g.candidates.push({
+      name: row.name,
+      office: row.office,
+      district: row.district,
+      town: row.town,
+      state: row.state,
+      photo: row.photo,
+      website: row.website,
+      cycle: row.cycle,
+    })
     if (LEVEL_PRIORITY[row.level] > LEVEL_PRIORITY[g.level]) {
       g.level = row.level
     }
@@ -99,7 +107,13 @@ export function buildMarkerGeoJSON(csvText) {
     features: [...groups.values()].map(g => ({
       type: 'Feature',
       geometry: { type: 'Point', coordinates: [g.lng, g.lat] },
-      properties: { level: g.level, color: COLORS[g.level], names: g.names, count: g.count },
+      properties: {
+        level: g.level,
+        color: COLORS[g.level],
+        names: g.candidates.map(c => c.name),
+        count: g.candidates.length,
+        candidates: g.candidates,
+      },
     })),
   }
 }

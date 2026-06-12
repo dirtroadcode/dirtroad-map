@@ -7,3 +7,4 @@ result
 .worktrees/
 test-embed.html
 assets/
+.env.local

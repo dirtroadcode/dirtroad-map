@@ -69,6 +69,27 @@ describe('buildMarkerGeoJSON', () => {
     expect(geojson.features[0].properties.names).toEqual(['Valid'])
   })
 
+  it('stores full candidate data in each feature\'s candidates property', () => {
+    const input = csv(
+      row({ name: 'Alice', office: 'State Senate', district: 'District 5', state: 'Tennessee', photo: 'https://example.com/alice.webp', website: 'https://alice.com', lat: '35.0', lng: '-85.0' }),
+      row({ name: 'Bob', office: 'County Commissioner', district: '', state: 'Georgia', photo: '', website: '', lat: '35.0', lng: '-85.0' }),
+    )
+
+    const geojson = buildMarkerGeoJSON(input)
+    expect(geojson.features).toHaveLength(1)
+    const candidates = geojson.features[0].properties.candidates
+    expect(candidates).toHaveLength(2)
+    expect(candidates[0]).toEqual({
+      name: 'Alice', office: 'State Senate', district: 'District 5',
+      town: '', state: 'Tennessee', photo: 'https://example.com/alice.webp',
+      website: 'https://alice.com', cycle: '2026',
+    })
+    expect(candidates[1]).toEqual({
+      name: 'Bob', office: 'County Commissioner', district: '',
+      town: '', state: 'Georgia', photo: '', website: '', cycle: '2026',
+    })
+  })
+
   it('assigns correct color per level', () => {
     const input = csv(
       row({ name: 'S', level: 'state', lat: '35.0', lng: '-85.0' }),

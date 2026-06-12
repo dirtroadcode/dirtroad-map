@@ -14,107 +14,11 @@ body,
   overflow: hidden;
 }
 
-.legend {
-  background: white;
-  padding: 8px 12px;
-  border-radius: 4px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
-  font: 13px/1.4 system-ui, sans-serif;
-  color: #333;
+/* Transparent canvas so page background shows through */
+.maplibregl-canvas {
+  background: transparent !important;
 }
 
-.legend-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.legend-row + .legend-row {
-  margin-top: 4px;
-}
-
-.legend-swatch {
-  display: inline-block;
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  flex-shrink: 0;
-}
-
-.popup-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  font: 13px/1.4 system-ui, sans-serif;
-  text-align: center;
-  min-width: 140px;
-}
-
-.popup-photo {
-  width: 200px;
-  height: auto;
-  border-radius: 4px;
-}
-
-.popup-divider {
-  border: none;
-  border-top: 1px solid #ddd;
-  margin: 8px 0;
-}
-
-.popup-name {
-  font-size: 14px;
-}
-
-a.popup-name {
-  color: #1a73e8;
-  text-decoration: none;
-}
-
-a.popup-name:hover {
-  text-decoration: underline;
-}
-
-.popup-office,
-.popup-detail {
-  color: #555;
-}
-
-.leaflet-control-attribution {
-  display: none;
-}
-
-/* Keep popups within the viewport in narrow iframes */
-.leaflet-popup-content-wrapper {
-  max-width: calc(100vw - 40px);
-}
-
-/* Smaller popups for narrow iframes (phone-width or sidebar widgets) */
-@media (max-width: 400px) {
-  .popup-card {
-    min-width: 100px;
-  }
-
-  .popup-photo {
-    width: 160px;
-    height: auto;
-  }
-
-  .popup-name {
-    font-size: 13px;
-  }
-
-  .popup-office,
-  .popup-detail {
-    font-size: 12px;
-  }
-}
-
-/* Compact legend for tiny embeds */
-@media (max-width: 300px) {
-  .legend {
-    padding: 4px 8px;
-    font-size: 11px;
-  }
+.maplibregl-map {
+  background: transparent !important;
 }

@@ -20,7 +20,7 @@ vi.mock('../src/popupRenderer.js', () => ({
   renderPopupContent: vi.fn(() => '<div>mock popup</div>'),
 }))
 vi.mock('../src/popupLayout.js', () => ({
-  prepareLayout: vi.fn(() => Promise.resolve({ dlat: 0.5, photoWidth: 180, photoHeight: 300, html: '<div>mock popup</div>' })),
+  prepareLayout: vi.fn(() => Promise.resolve({ dlat: 0.5, photoWidth: 180, photoHeight: 300, html: '<div>mock popup</div>', maxWidth: 300 })),
 }))
 vi.mock('../src/deck.js', () => ({
   createDeck: vi.fn((items) => {

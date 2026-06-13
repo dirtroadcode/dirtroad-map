@@ -329,4 +329,27 @@ describe('prepareLayout', () => {
     expect(layout.html).not.toMatch(/width:\s*\d+px/)
     expect(layout.html).not.toMatch(/height:\s*\d+px/)
   })
+
+  it('returns maxWidth that accommodates the computed photo width', async () => {
+    const candidates = [{
+      ...baseCandidate,
+      photo: 'https://example.com/photo.webp',
+    }]
+    // prepareLayout preloads images — since this URL doesn't exist,
+    // it'll fall back to square aspect ratio. We just need to verify
+    // maxWidth > 300 (the old hard-coded value) when photo is wider.
+    const layout = await prepareLayout(candidates, 40, 8, 800)
+
+    // With a 800px viewport, photo should be large enough that maxWidth > 300
+    expect(layout.maxWidth).toBeGreaterThan(300)
+    // maxWidth should accommodate photoWidth + some padding
+    expect(layout.maxWidth).toBeGreaterThanOrEqual(layout.photoWidth)
+  })
+
+  it('returns default maxWidth when no photo', async () => {
+    const candidates = [{ ...baseCandidate, photo: '' }]
+    const layout = await prepareLayout(candidates, 40, 8, 600)
+
+    expect(layout.maxWidth).toBe('300px')
+  })
 })

@@ -227,9 +227,15 @@ export async function prepareLayout(candidates, lat, zoom, viewportHeight) {
   // Render HTML with the computed photo sizing baked in
   const html = renderPopupContent(candidates, photoSize)
 
+  // Compute maxWidth to accommodate the photo (or default)
+  const maxWidth = photoSize.photoWidth > 0
+    ? photoSize.photoWidth + CONTENT_PADDING
+    : '300px'
+
   return {
     dlat: pixelOffsetToLatOffset(lat, zoom, offsetPx),
     html,
+    maxWidth,
     photoWidth: photoSize.photoWidth,
     photoHeight: photoSize.photoHeight,
   }

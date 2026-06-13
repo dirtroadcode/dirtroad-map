@@ -1,4 +1,4 @@
-import { COLORS } from './markers.js'
+import { LEVELS, COLORS } from './levels.js'
 
 const LABELS = [
   { level: 'state', label: 'State' },

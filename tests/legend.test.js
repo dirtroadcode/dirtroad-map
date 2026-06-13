@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import { describe, it, expect } from 'vitest'
 import { createLegend } from '../src/legend.js'
-import { COLORS } from '../src/markers.js'
+import { COLORS } from '../src/levels.js'
 
 describe('createLegend', () => {
   it('returns a container with three legend items labeled State, County, Local', () => {

@@ -1,4 +1,5 @@
 import maplibregl from 'maplibre-gl'
+import { CANDIDATE_LAYERS } from './levels.js'
 
 /**
  * Render a branded popup card for a single candidate.
@@ -40,12 +41,6 @@ export function renderPopupCard(candidate) {
 export function renderPopupContent(candidates) {
   return candidates.map(renderPopupCard).join('<hr class="popup-divider">')
 }
-
-const CANDIDATE_LAYERS = [
-  'candidates-state-glow', 'candidates-state-dot',
-  'candidates-county-glow', 'candidates-county-dot',
-  'candidates-local-glow', 'candidates-local-dot',
-]
 
 /**
  * Attach click handlers to all candidate layers to open branded popups.

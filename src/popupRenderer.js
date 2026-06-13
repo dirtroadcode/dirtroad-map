@@ -76,7 +76,7 @@ export function attachPopupHandlers(map) {
 
       const layout = await prepareLayout(parsed, center.lat, zoom, viewportHeight)
 
-      popup.open(layout.html, e.lngLat)
+      popup.open(layout.html, e.lngLat, { maxWidth: layout.maxWidth })
 
       // Adjust camera so popup fits below viewport top
       if (layout.dlat > 0) {

@@ -68,9 +68,12 @@ export function startKiosk(map, geojson) {
     const html = currentLayout
       ? currentLayout.html
       : renderPopupContent(parsed)
+    const maxWidth = currentLayout
+      ? currentLayout.maxWidth
+      : undefined
     const [lng, lat] = feature.geometry.coordinates
 
-    popup.open(html, [lng, lat])
+    popup.open(html, [lng, lat], { maxWidth })
   }
 
   function onMoveEnd() {

@@ -126,4 +126,16 @@ describe('createPopupManager', () => {
     manager.close()
     expect(MockPopup._instances).toHaveLength(0)
   })
+
+  it('open() accepts opts.maxWidth to override default', () => {
+    const map = createMap()
+    const manager = createPopupManager(map)
+
+    manager.open('<div>Wide</div>', { lng: -85, lat: 35 }, { maxWidth: 420 })
+
+    expect(MockPopup._instances).toHaveLength(1)
+    const popup = MockPopup._instances[0]
+    expect(popup._opts.maxWidth).toBe(420)
+    expect(popup._html).toBe('<div>Wide</div>')
+  })
 })

@@ -11,8 +11,8 @@ vi.mock('../src/popupManager.js', () => {
   const closes = []
   function createPopupManager(map) {
     return {
-      open(html, lngLat) {
-        opens.push({ html, lngLat, map })
+      open(html, lngLat, opts) {
+        opens.push({ html, lngLat, map, opts })
       },
       close() {
         closes.push(true)

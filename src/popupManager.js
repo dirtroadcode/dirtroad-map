@@ -10,12 +10,12 @@ import maplibregl from 'maplibre-gl'
 export function createPopupManager(map) {
   let currentPopup = null
 
-  function open(html, lngLat) {
+  function open(html, lngLat, opts = {}) {
     close()
     currentPopup = new maplibregl.Popup({
       closeButton: false,
       closeOnClick: false,
-      maxWidth: '300px',
+      maxWidth: opts.maxWidth ?? '300px',
       offset: 12,
     })
       .setHTML(html)

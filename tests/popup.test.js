@@ -280,9 +280,10 @@ describe('attachPopupHandlers', () => {
     expect(popupOpens[0].html).toMatch(/width:\s*\d+px/)
     expect(popupOpens[0].html).toMatch(/height:\s*\d+px/)
     expect(popupOpens[0].html).toContain('object-fit: cover')
-    // Should pass maxWidth from layout
+    // Should pass maxWidth from layout as a CSS string
     expect(popupOpens[0].opts).toBeDefined()
-    expect(popupOpens[0].opts.maxWidth).toBeGreaterThan(0)
+    expect(typeof popupOpens[0].opts.maxWidth).toBe('string')
+    expect(popupOpens[0].opts.maxWidth).toMatch(/^\d+px$/)
   })
 
   it('eases map center south when popup would extend above viewport', async () => {

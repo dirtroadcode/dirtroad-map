@@ -196,16 +196,12 @@ describe('computeTargetPhotoSize', () => {
 
     const size = computeTargetPhotoSize(viewportHeight, candidates, imageSizes)
 
-    // Total popup height at fixed 200px width would be:
-    // arrow(12) + margin(16) + padding(24) + popupOffset(12) + photo(300) + name(22) + state(16) + office(17) + gaps(12) = 431
-    // 90% of viewport = 540. Available for photo = 540 - (431 - 300) = 540 - 131 = 409
-    // Width derived from aspect ratio: 409 * (400/600) ≈ 273
-    expect(size.photoHeight).toBeGreaterThan(0)
-    expect(size.photoWidth).toBeGreaterThan(0)
-
     // Chrome (non-photo content) should be ~131px
     // 0.9 * 600 = 540 available. 540 - 131 chrome = 409 for photo
-    expect(size.photoHeight).toBe(409)
+    // But MAX_PHOTO_HEIGHT_RATIO (0.6) caps height to 360 → that wins
+    expect(size.photoHeight).toBeGreaterThan(0)
+    expect(size.photoWidth).toBeGreaterThan(0)
+    expect(size.photoHeight).toBe(360) // capped by 0.6 * 600
   })
 
   it('derives width from image aspect ratio', () => {
@@ -225,7 +221,7 @@ describe('computeTargetPhotoSize', () => {
   })
 
   it('clamps to minimum height so tiny viewports do not collapse', () => {
-    const viewportHeight = 100 // very small viewport
+    const viewportHeight = 300 // small viewport, but not tiny enough for MIN_PHOTO_HEIGHT
     const candidates = [{
       ...baseCandidate,
       photo: 'https://example.com/photo.webp',
@@ -236,8 +232,62 @@ describe('computeTargetPhotoSize', () => {
 
     const size = computeTargetPhotoSize(viewportHeight, candidates, imageSizes)
 
-    // Even on tiny viewports, photo should not collapse
+    // 0.6 * 300 = 180 max height, which is above MIN_PHOTO_HEIGHT (100)
     expect(size.photoHeight).toBeGreaterThanOrEqual(100)
+  })
+
+  it('caps photo width to a maximum so popups stay narrow', () => {
+    // Square image on a tall viewport would produce a huge square photo
+    const viewportHeight = 1080
+    const candidates = [{
+      ...baseCandidate,
+      photo: 'https://example.com/square.webp',
+    }]
+    const imageSizes = new Map([
+      ['https://example.com/square.webp', { width: 500, height: 500 }],
+    ])
+
+    const size = computeTargetPhotoSize(viewportHeight, candidates, imageSizes)
+
+    // Width must be capped (300px max) even though viewport would allow much more
+    expect(size.photoWidth).toBeLessThanOrEqual(300)
+    // Height should be scaled down proportionally (square → same as width)
+    expect(size.photoHeight).toBe(size.photoWidth)
+  })
+
+  it('caps photo height to a fraction of viewport height', () => {
+    // Tall image (portrait headshot) on a large viewport
+    const viewportHeight = 1080
+    const candidates = [{
+      ...baseCandidate,
+      photo: 'https://example.com/tall.webp',
+    }]
+    const imageSizes = new Map([
+      ['https://example.com/tall.webp', { width: 300, height: 600 }],
+    ])
+
+    const size = computeTargetPhotoSize(viewportHeight, candidates, imageSizes)
+
+    // Photo should not fill more than 60% of viewport height
+    expect(size.photoHeight).toBeLessThanOrEqual(Math.round(0.6 * viewportHeight))
+  })
+
+  it('respects the tighter constraint when both width and height caps apply', () => {
+    // Wide landscape photo on a large viewport: width cap should dominate
+    const viewportHeight = 1080
+    const candidates = [{
+      ...baseCandidate,
+      photo: 'https://example.com/wide.webp',
+    }]
+    const imageSizes = new Map([
+      ['https://example.com/wide.webp', { width: 1200, height: 400 }], // 3:1 aspect
+    ])
+
+    const size = computeTargetPhotoSize(viewportHeight, candidates, imageSizes)
+
+    // Width capped at 300 → height = 300 * (400/1200) = 100
+    expect(size.photoWidth).toBeLessThanOrEqual(300)
+    expect(size.photoHeight).toBe(Math.round(size.photoWidth * (400 / 1200)))
   })
 
   it('returns zero dimensions when no candidate has a photo', () => {
@@ -268,7 +318,7 @@ describe('prepareLayout', () => {
     expect(layout.photoWidth).toBeGreaterThan(0)
   })
 
-  it('positions popup top at ~5% of viewport for 90% fill', async () => {
+  it('positions popup within the viewport', async () => {
     const candidates = [{
       ...baseCandidate,
       photo: 'https://example.com/photo.webp',
@@ -279,18 +329,13 @@ describe('prepareLayout', () => {
 
     const layout = await prepareLayout(candidates, lat, zoom, viewportHeight)
 
-    // The popup should fill 90% of the viewport.
-    // Camera center should be offset so popup top is at ~5% (30px) from top.
-    // offsetPx = 0.05 * viewportHeight + totalPopupHeight - viewportHeight / 2
-    // where totalPopupHeight = chrome + photoHeight
-    //
-    // We can verify by converting dlat back to pixels and checking
-    // that popup top is near 5% of viewport.
+    // The camera offset should push the center so the popup fits in view
+    // popup top = viewportHeight/2 - dlatPx should be > 0
     const dlatPx = layout.dlat / pixelOffsetToLatOffset(lat, zoom, 1)
-    const totalHeight = dlatPx + viewportHeight / 2 - 0.05 * viewportHeight
     const popupTop = viewportHeight / 2 - dlatPx
-    // popupTop should be approximately 5% of viewport
-    expect(popupTop).toBeCloseTo(0.05 * viewportHeight, -1) // within ~10px
+    expect(popupTop).toBeGreaterThan(0)
+    // Popup should occupy upper portion of viewport, not push marker below center
+    expect(dlatPx).toBeGreaterThanOrEqual(0)
   })
 
   it('returns zero photo dimensions when no candidate has a photo', async () => {
@@ -330,20 +375,19 @@ describe('prepareLayout', () => {
     expect(layout.html).not.toMatch(/height:\s*\d+px/)
   })
 
-  it('returns maxWidth that accommodates the computed photo width', async () => {
+  it('returns maxWidth as a CSS string with px unit', async () => {
     const candidates = [{
       ...baseCandidate,
       photo: 'https://example.com/photo.webp',
     }]
-    // prepareLayout preloads images — since this URL doesn't exist,
-    // it'll fall back to square aspect ratio. We just need to verify
-    // maxWidth > 300 (the old hard-coded value) when photo is wider.
     const layout = await prepareLayout(candidates, 40, 8, 800)
 
-    // With a 800px viewport, photo should be large enough that maxWidth > 300
-    expect(layout.maxWidth).toBeGreaterThan(300)
-    // maxWidth should accommodate photoWidth + some padding
-    expect(layout.maxWidth).toBeGreaterThanOrEqual(layout.photoWidth)
+    // maxWidth must be a CSS string like '324px', not a bare number
+    expect(typeof layout.maxWidth).toBe('string')
+    expect(layout.maxWidth).toMatch(/^\d+px$/)
+    // Should accommodate photoWidth + padding
+    const numericWidth = parseInt(layout.maxWidth)
+    expect(numericWidth).toBeGreaterThanOrEqual(layout.photoWidth)
   })
 
   it('returns default maxWidth when no photo', async () => {

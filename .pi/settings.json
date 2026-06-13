@@ -5,7 +5,7 @@
   "clanker": {
     "forge": {
       "type": "github",
-      "url": "https://github.com/",
+      "url": "https://api.github.com",
       "repo": "dirtroadcode/dirtroad-map",
       "token": "GH_TOKEN"
     }

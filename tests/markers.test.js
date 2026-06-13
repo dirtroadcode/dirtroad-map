@@ -1,5 +1,6 @@
 import { describe, it, expect, vi } from 'vitest'
-import { buildMarkerGeoJSON, addMarkerLayers, COLORS } from '../src/markers.js'
+import { buildMarkerGeoJSON, addMarkerLayers } from '../src/markers.js'
+import { COLORS } from '../src/levels.js'
 
 /** Minimal valid CSV row helpers */
 const header = 'name,level,office,district,town,state,photo,website,cycle,lat,lng'

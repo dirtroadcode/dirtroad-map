@@ -1,16 +1,10 @@
 import Papa from 'papaparse'
-
-const LEVEL_PRIORITY = { state: 3, county: 2, local: 1 }
+import { LEVELS, COLORS, LEVEL_PRIORITY } from './levels.js'
 
 const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTWI2J4Ft6P1WzimxGQ39K7XcbEQv-3H6T6B2mnmq1w_nIxSLK_01pRJlGIdCT-PdDQK2WeUh-Xer_l/pub?gid=1399665600&single=true&output=csv'
 
-export const COLORS = {
-  state:  '#F5C518',  // brand yellow
-  county: '#B87333',  // copper/rust
-  local:  '#7A9E7E',  // sage green
-}
-
-const LEVELS = ['state', 'county', 'local']
+// Re-export COLORS for backward compatibility during migration
+export { COLORS }
 
 /**
  * Fetch candidate CSV, build grouped GeoJSON, and add marker layers to the map.

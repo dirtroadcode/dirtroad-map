@@ -3,7 +3,7 @@ import 'maplibre-gl/dist/maplibre-gl.css'
 import usBoundary from '../data/us-boundary.json'
 
 const US_CENTER = [-98.5, 39.8]
-const DEFAULT_ZOOM = 4
+const DEFAULT_ZOOM = 3.5
 
 /**
  * Create the transparent MapLibre style with just a background layer.
@@ -57,14 +57,25 @@ export function initMap({ container }) {
     container,
     style: createStyle(),
     center: US_CENTER,
-    zoom: isMobile ? 3.5 : DEFAULT_ZOOM,
+    zoom: DEFAULT_ZOOM,
     attributionControl: false,
   })
+
+  const usBounds = [
+    [-125, 24],  // SW corner
+    [-66, 50],   // NE corner
+  ]
+
+  const fitUS = () => map.fitBounds(usBounds, { padding: 20 })
+
+  map.on('load', fitUS)
+  window.addEventListener('resize', fitUS)
 
   map.scrollZoom.disable()
 
   map.on('click', () => {
     map.scrollZoom.enable()
+    window.removeEventListener('resize', fitUS)
     container.classList.add('map-interactive')
   })
 

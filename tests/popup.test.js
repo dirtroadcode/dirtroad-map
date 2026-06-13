@@ -1,31 +1,34 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 
 vi.mock('maplibre-gl', () => {
-  const instances = []
-  class FakePopup {
-    constructor(opts) {
-      this._opts = opts
-      this._html = ''
-      this._lngLat = null
-      this._map = null
-      this._removed = false
-      instances.push(this)
-    }
-    setHTML(html) { this._html = html; return this }
-    setLngLat(ll) { this._lngLat = ll; return this }
-    addTo(m) { this._map = m; return this }
-    remove() { this._removed = true }
-  }
-  // Expose instances array for test access
-  FakePopup._instances = instances
   return {
-    default: { Popup: FakePopup },
+    default: {},
   }
 })
 
-import { renderPopupCard, renderPopupContent, attachPopupHandlers } from '../src/popupRenderer.js'
+vi.mock('../src/popupManager.js', () => {
+  const opens = []
+  const closes = []
+  function createPopupManager(map) {
+    return {
+      open(html, lngLat) {
+        opens.push({ html, lngLat, map })
+      },
+      close() {
+        closes.push(true)
+      },
+    }
+  }
+  createPopupManager._opens = opens
+  createPopupManager._closes = closes
+  return { createPopupManager }
+})
 
-const { Popup: MockPopup } = (await import('maplibre-gl')).default
+import { renderPopupCard, renderPopupContent, attachPopupHandlers } from '../src/popupRenderer.js'
+import { createPopupManager as mockPopupManager } from '../src/popupManager.js'
+
+const popupOpens = mockPopupManager._opens
+const popupCloses = mockPopupManager._closes
 
 describe('renderPopupCard', () => {
   it('renders photo, linked name, office, district, and state', () => {
@@ -145,7 +148,8 @@ describe('attachPopupHandlers', () => {
   }
 
   beforeEach(() => {
-    MockPopup._instances.length = 0
+    popupOpens.length = 0
+    popupCloses.length = 0
   })
 
   it('registers click handlers on all 6 candidate layers', () => {
@@ -182,12 +186,11 @@ describe('attachPopupHandlers', () => {
       { x: 100, y: 100 },
       { layers: ['candidates-state-glow'] },
     )
-    expect(MockPopup._instances).toHaveLength(1)
-    const popup = MockPopup._instances[0]
-    expect(popup._html).toContain('Alice')
-    expect(popup._html).toContain('State Senate')
-    expect(popup._lngLat).toEqual({ lng: -85, lat: 35 })
-    expect(popup._map).toBe(map)
+    expect(popupOpens).toHaveLength(1)
+    expect(popupOpens[0].html).toContain('Alice')
+    expect(popupOpens[0].html).toContain('State Senate')
+    expect(popupOpens[0].lngLat).toEqual({ lng: -85, lat: 35 })
+    expect(popupOpens[0].map).toBe(map)
   })
 
   it('closes popup when map background is clicked', () => {
@@ -205,6 +208,6 @@ describe('attachPopupHandlers', () => {
     const bgHandler = map._listeners['click'][0]
     bgHandler({})
 
-    expect(MockPopup._instances[0]._removed).toBe(true)
+    expect(popupCloses).toHaveLength(1)
   })
 })

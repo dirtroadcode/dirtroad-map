@@ -3,15 +3,19 @@ import { startKiosk, flyDuration } from '../src/kiosk.js'
 import { renderPopupContent } from '../src/popupRenderer.js'
 import { prepareFlyToOffset } from '../src/popupLayout.js'
 
-vi.mock('maplibre-gl', () => {
-  const MockPopup = vi.fn(function() {
-    this.setHTML = vi.fn(function() { return this })
-    this.setLngLat = vi.fn(function() { return this })
-    this.addTo = vi.fn(function() { return this })
-    this.remove = vi.fn()
-  })
-  return { default: { Popup: MockPopup, Map: vi.fn() }, Popup: MockPopup }
-})
+// Track popup opens/closes via the mock
+const popupState = { opens: [], closes: [] }
+
+vi.mock('../src/popupManager.js', () => ({
+  createPopupManager: vi.fn((map) => ({
+    open: vi.fn((html, lngLat) => {
+      popupState.opens.push({ html, lngLat, map })
+    }),
+    close: vi.fn(() => {
+      popupState.closes.push(true)
+    }),
+  })),
+}))
 vi.mock('../src/popupRenderer.js', () => ({
   renderPopupContent: vi.fn(() => '<div>mock popup</div>'),
 }))
@@ -76,7 +80,11 @@ function makeGeoJSON(features) {
 }
 
 describe('startKiosk', () => {
-  beforeEach(() => { vi.useFakeTimers({ shouldAdvanceTime: true }) })
+  beforeEach(() => {
+    vi.useFakeTimers({ shouldAdvanceTime: true })
+    popupState.opens.length = 0
+    popupState.closes.length = 0
+  })
   afterEach(() => { vi.restoreAllMocks(); vi.useRealTimers() })
 
   it('flies to first feature after initial hold', async () => {

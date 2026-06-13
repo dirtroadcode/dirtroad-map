@@ -1,4 +1,4 @@
-import maplibregl from 'maplibre-gl'
+import { createPopupManager } from './popupManager.js'
 import { createDeck } from './deck.js'
 import { renderPopupContent } from './popupRenderer.js'
 import { prepareFlyToOffset } from './popupLayout.js'
@@ -36,14 +36,14 @@ export function startKiosk(map, geojson) {
   const deck = createDeck(features)
   let killed = false
   let timer = null
-  let currentPopup = null
+  const popup = createPopupManager(map)
   let currentFeature = null
   let previousFeature = null
 
   function kill() {
     killed = true
     if (timer) clearTimeout(timer)
-    if (currentPopup) { currentPopup.remove(); currentPopup = null }
+    popup.close()
   }
 
   const container = map.getContainer()
@@ -57,7 +57,7 @@ export function startKiosk(map, geojson) {
     return raw ? (typeof raw === 'string' ? JSON.parse(raw) : raw) : []
   }
 
-  function openPopup(feature) {
+  function openKioskPopup(feature) {
     if (killed) return
 
     const candidates = feature.properties.candidates
@@ -67,26 +67,7 @@ export function startKiosk(map, geojson) {
     const html = renderPopupContent(parsed)
     const [lng, lat] = feature.geometry.coordinates
 
-    currentPopup = new maplibregl.Popup({
-      closeButton: false,
-      closeOnClick: false,
-      maxWidth: '300px',
-      offset: 12,
-    })
-      .setHTML(html)
-      .setLngLat([lng, lat])
-      .addTo(map)
-  }
-
-  function closePopup() {
-    if (!currentPopup) return
-    const el = currentPopup.getElement()
-    el.classList.add('maplibregl-popup-close')
-    const popup = currentPopup
-    currentPopup = null
-    setTimeout(() => {
-      popup.remove()
-    }, 150)
+    popup.open(html, [lng, lat])
   }
 
   function onMoveEnd() {
@@ -104,13 +85,13 @@ export function startKiosk(map, geojson) {
     // Defer popup to next frame — moveend fires before final render,
     // so the popup would flash at [0,0] for one frame otherwise
     requestAnimationFrame(() => {
-      openPopup(currentFeature)
+      openKioskPopup(currentFeature)
     })
 
     // Hold popup for N seconds, then close and fly to next
     timer = setTimeout(() => {
       if (killed) return
-      closePopup()
+      popup.close()
 
       timer = setTimeout(() => {
         flyToNext()

@@ -1,5 +1,5 @@
-import maplibregl from 'maplibre-gl'
 import { CANDIDATE_LAYERS } from './levels.js'
+import { createPopupManager } from './popupManager.js'
 
 /**
  * Render a branded popup card for a single candidate.
@@ -48,36 +48,10 @@ export function renderPopupContent(candidates) {
  * @param {maplibregl.Map} map
  */
 export function attachPopupHandlers(map) {
-  let currentPopup = null
-
-  function openPopup(html, lngLat) {
-    closePopup()
-    currentPopup = new maplibregl.Popup({
-      closeButton: false,
-      closeOnClick: false,
-      maxWidth: '300px',
-      offset: 12,
-    })
-      .setHTML(html)
-      .setLngLat(lngLat)
-      .addTo(map)
-  }
-
-  function closePopup() {
-    if (!currentPopup) return
-    const el = currentPopup.getElement()
-    if (el) {
-      el.classList.add('maplibregl-popup-close')
-      const popup = currentPopup
-      el.addEventListener('animationend', () => popup.remove(), { once: true })
-    } else {
-      currentPopup.remove()
-    }
-    currentPopup = null
-  }
+  const popup = createPopupManager(map)
 
   // Close popup on background click
-  map.on('click', closePopup)
+  map.on('click', () => popup.close())
 
   for (const layerId of CANDIDATE_LAYERS) {
     map.on('click', layerId, (e) => {
@@ -88,7 +62,7 @@ export function attachPopupHandlers(map) {
       if (!candidates) return
 
       const parsed = typeof candidates === 'string' ? JSON.parse(candidates) : candidates
-      openPopup(renderPopupContent(parsed), e.lngLat)
+      popup.open(renderPopupContent(parsed), e.lngLat)
     })
   }
 }

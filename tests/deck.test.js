@@ -39,4 +39,17 @@ describe('createDeck', () => {
       expect(visited.sort()).toEqual(['x', 'y'])
     }
   })
+
+  it('peek returns the next item without consuming it', () => {
+    const items = ['a', 'b', 'c']
+    const deck = createDeck(items)
+
+    const peeked = deck.peek()
+    const next = deck.next()
+
+    expect(peeked).toBe(next)
+    // peek doesn't advance
+    expect(deck.peek()).not.toBe(next)
+    expect(deck.next()).not.toBe(next)
+  })
 })

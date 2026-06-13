@@ -1,42 +1,49 @@
+import maplibregl from 'maplibre-gl'
 import { createDeck } from './deck.js'
+import { renderPopupContent } from './popupRenderer.js'
+import { prepareFlyToOffset } from './popupLayout.js'
 
-const HOLD_MS = 5000
-const PAUSE_MS = 500
 const INITIAL_HOLD_MS = 2000
-const HIGHLIGHT_RADIUS = 12
-const PAN_MIN_S = 0.5
-const PAN_MAX_S = 2.0
+const POPUP_HOLD_MS = 5000
+const PAUSE_MS = 500
+const DURATION_MIN_MS = 4000
+const DURATION_MAX_MS = 12000
 
 /**
- * Calculate pan duration based on distance between two points.
- * Returns a value between PAN_MIN_S and PAN_MAX_S.
+ * Calculate fly duration in ms based on distance between two points.
+ * Cross-country (~60°) → max; short hops → min.
  */
-function panDuration(from, to) {
+export function flyDuration(from, to) {
   const dx = to.lng - from.lng
   const dy = to.lat - from.lat
   const dist = Math.sqrt(dx * dx + dy * dy)
-  // ~60 degrees of lat/lng is roughly cross-country
   const t = Math.min(1, dist / 60)
-  return PAN_MIN_S + t * (PAN_MAX_S - PAN_MIN_S)
+  return DURATION_MIN_MS + t * (DURATION_MAX_MS - DURATION_MIN_MS)
 }
 
 /**
  * Start the kiosk animation loop on the given map.
- * Glides between markers, opening popups, until the user interacts.
+ * Flies between markers with cinematic arcs, opening popups, until the user interacts.
  *
- * @param {L.Map} map
- * @param {L.CircleMarker[]} markers
+ * @param {maplibregl.Map} map
+ * @param {GeoJSON.FeatureCollection} geojson
+ * @returns {{ kill: () => void }}
  */
-export function startKiosk(map, markers) {
-  if (!markers.length) return
+export function startKiosk(map, geojson) {
+  const features = geojson.features
+  if (!features.length) return { kill() {} }
 
-  const deck = createDeck(markers)
+  const deck = createDeck(features)
   let killed = false
   let timer = null
+  let currentPopup = null
+  let currentFeature = null
+  let previousFeature = null
 
   function kill() {
     killed = true
     if (timer) clearTimeout(timer)
+    if (currentPopup) { currentPopup.remove(); currentPopup = null }
   }
 
   const container = map.getContainer()
@@ -45,44 +52,106 @@ export function startKiosk(map, markers) {
     container.addEventListener(event, kill, { once: true })
   })
 
-  let lastLatLng = null
-
-  function showNext() {
-    if (killed) return
-
-    const marker = deck.next()
-    const target = marker.getLatLng()
-    const duration = lastLatLng ? panDuration(lastLatLng, target) : PAN_MIN_S
-    lastLatLng = target
-
-    // Offset pan target up by 10% of viewport so popup doesn't cover marker
-    const px = map.latLngToContainerPoint(target)
-    const offsetTarget = map.containerPointToLatLng(px.subtract([0, map.getSize().y / 4]))
-
-    map.panTo(offsetTarget, { animate: true, duration })
-
-    timer = setTimeout(() => {
-      if (killed) return
-      // Highlight active marker
-      const originalRadius = marker.options?.radius ?? 8
-      marker.setStyle({ radius: HIGHLIGHT_RADIUS })
-      marker.openPopup()
-
-      // Hold popup for N seconds, then close and pause before next
-      timer = setTimeout(() => {
-        if (killed) return
-        marker.setStyle({ radius: originalRadius })
-        marker.closePopup()
-
-        timer = setTimeout(() => {
-          showNext()
-        }, PAUSE_MS)
-      }, HOLD_MS)
-    }, duration * 1000)
+  function parseCandidates(feature) {
+    const raw = feature.properties.candidates
+    return raw ? (typeof raw === 'string' ? JSON.parse(raw) : raw) : []
   }
 
-  // Initial hold — let user see the full map before gliding
+  function openPopup(feature) {
+    if (killed) return
+
+    const candidates = feature.properties.candidates
+    if (!candidates) return
+
+    const parsed = parseCandidates(feature)
+    const html = renderPopupContent(parsed)
+    const [lng, lat] = feature.geometry.coordinates
+
+    currentPopup = new maplibregl.Popup({
+      closeButton: false,
+      closeOnClick: false,
+      maxWidth: '300px',
+      offset: 12,
+    })
+      .setHTML(html)
+      .setLngLat([lng, lat])
+      .addTo(map)
+  }
+
+  function closePopup() {
+    if (currentPopup) {
+      currentPopup.remove()
+      currentPopup = null
+    }
+  }
+
+  function onMoveEnd() {
+    if (killed || !currentFeature) return
+
+    // Highlight active feature
+    if (currentFeature.id != null) {
+      map.setFeatureState(
+        { source: 'candidates', id: currentFeature.id },
+        { highlight: true }
+      )
+      previousFeature = currentFeature
+    }
+
+    openPopup(currentFeature)
+
+    // Hold popup for N seconds, then close and fly to next
+    timer = setTimeout(() => {
+      if (killed) return
+      closePopup()
+
+      timer = setTimeout(() => {
+        flyToNext()
+      }, PAUSE_MS)
+    }, POPUP_HOLD_MS)
+  }
+
+  map.on('moveend', onMoveEnd)
+
+  async function flyToNext() {
+    if (killed) return
+
+    // Unhighlight previous feature
+    if (previousFeature && previousFeature.id != null) {
+      map.removeFeatureState({ source: 'candidates', id: previousFeature.id })
+    }
+
+    const feature = deck.next()
+    const [lng, lat] = feature.geometry.coordinates
+    currentFeature = feature
+
+    const from = map.getCenter()
+    const duration = flyDuration(
+      { lat: from.lat, lng: from.lng },
+      { lat, lng }
+    )
+
+    // Await the deep module: preload images → compute height → lat offset
+    const dlat = await prepareFlyToOffset(
+      parseCandidates(feature),
+      lat,
+      8,
+    )
+
+    if (killed) return  // may have been killed while awaiting
+
+    map.flyTo({
+      center: [lng, lat + dlat],
+      zoom: 8,
+      curve: 1.42,
+      duration,
+      easing(t) { return t },
+    })
+  }
+
+  // Initial hold — let user see the full map before flying
   timer = setTimeout(() => {
-    showNext()
+    flyToNext()
   }, INITIAL_HOLD_MS)
+
+  return { kill }
 }

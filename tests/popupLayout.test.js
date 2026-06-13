@@ -141,4 +141,34 @@ describe('prepareFlyToOffset', () => {
     // Even without preloaded sizes, it should still produce an offset
     expect(noPhotoOffset).toBeGreaterThan(0)
   })
+
+  it('positions popup between top padding and marker — viewport-aware', async () => {
+    const candidates = [{ ...baseCandidate, photo: '' }]
+    const lat = 40
+    const zoom = 8
+    const viewportHeight = 600
+
+    const dlat = await prepareFlyToOffset(candidates, lat, zoom, viewportHeight)
+
+    // Compute expected offset: popup sits between top padding and marker,
+    // marker at (popupHeight + TOP_PADDING) from top, centered means:
+    //   offsetPx = popupHeight + TOP_PADDING - viewportHeight / 2
+    const fullHeightPx = computePopupOffsetPx(candidates, new Map())
+    const TOP_PADDING = 16
+    const expectedPx = fullHeightPx + TOP_PADDING - viewportHeight / 2
+    const expectedDlat = pixelOffsetToLatOffset(lat, zoom, expectedPx)
+
+    expect(dlat).toBeCloseTo(expectedDlat, 10)
+  })
+
+  it('shorter viewport pushes marker further below center — popup fills the view', async () => {
+    const candidates = [{ ...baseCandidate, photo: '' }]
+
+    const shortDlat = await prepareFlyToOffset(candidates, 40, 8, 400)
+    const tallDlat = await prepareFlyToOffset(candidates, 40, 8, 900)
+
+    // Short viewport → popup takes up more of the view → marker pushed further down → larger dlat
+    // Tall viewport → popup is small → marker stays near top → smaller (or negative) dlat
+    expect(shortDlat).toBeGreaterThan(tallDlat)
+  })
 })

@@ -69,10 +69,16 @@ export function attachPopupHandlers(map) {
   }
 
   function closePopup() {
-    if (currentPopup) {
+    if (!currentPopup) return
+    const el = currentPopup.getElement()
+    if (el) {
+      el.classList.add('maplibregl-popup-close')
+      const popup = currentPopup
+      el.addEventListener('animationend', () => popup.remove(), { once: true })
+    } else {
       currentPopup.remove()
-      currentPopup = null
     }
+    currentPopup = null
   }
 
   // Close popup on background click

@@ -38,9 +38,10 @@ vi.mock('../src/deck.js', () => ({
 /**
  * Creates a mock MapLibre map that spies on flyTo, setFeatureState, etc.
  */
-function createMockMap() {
+function createMockMap(viewportHeight = 600) {
   const container = document.createElement('div')
   Object.defineProperty(container, 'addEventListener', { value: vi.fn() })
+  Object.defineProperty(container, 'clientHeight', { value: viewportHeight })
 
   return {
     flyTo: vi.fn(),
@@ -172,6 +173,9 @@ describe('startKiosk', () => {
 
     // Fire moveend
     moveEndHandler()
+
+    // Popup is deferred via requestAnimationFrame — flush it
+    await new Promise(r => requestAnimationFrame(r))
 
     // Should have called renderPopupContent with the feature's candidates
     expect(renderPopupContent).toHaveBeenCalledWith(candidates)
@@ -341,6 +345,7 @@ describe('startKiosk', () => {
       expect.arrayContaining([expect.objectContaining({ name: 'Test Candidate' })]),
       35.0,
       8,
+      600, // viewport height from createMockMap default
     )
   })
 })

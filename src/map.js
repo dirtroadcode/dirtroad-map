@@ -39,7 +39,7 @@ export function addUsBoundary(map) {
     type: 'fill',
     source: 'us-boundary',
     paint: {
-      'fill-color': '#1a2744',
+      'fill-color': '#001725',
       'fill-opacity': 1,
     },
   })

@@ -97,7 +97,11 @@ export function startKiosk(map, geojson) {
       previousFeature = currentFeature
     }
 
-    openPopup(currentFeature)
+    // Defer popup to next frame — moveend fires before final render,
+    // so the popup would flash at [0,0] for one frame otherwise
+    requestAnimationFrame(() => {
+      openPopup(currentFeature)
+    })
 
     // Hold popup for N seconds, then close and fly to next
     timer = setTimeout(() => {
@@ -131,10 +135,12 @@ export function startKiosk(map, geojson) {
     )
 
     // Await the deep module: preload images → compute height → lat offset
+    const viewportHeight = map.getContainer().clientHeight
     const dlat = await prepareFlyToOffset(
       parseCandidates(feature),
       lat,
       8,
+      viewportHeight,
     )
 
     if (killed) return  // may have been killed while awaiting

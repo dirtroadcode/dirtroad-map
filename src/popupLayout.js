@@ -108,18 +108,30 @@ export function preloadImageSizes(candidates, timeoutMs = 3000) {
   return Promise.all(entries).then(pairs => new Map(pairs))
 }
 
+const TOP_PADDING = 16  // space above popup in viewport
+
 /**
  * Deep module: preloads images, computes popup height, and converts to
- * latitude offset for centering. Returns half the popup height so the
- * popup center aligns with the viewport center.
+ * latitude offset for viewport-aware centering.
+ *
+ * Positions the marker so the popup fills the space between top padding
+ * and the marker dot, with the marker at viewport vertical center.
+ *
+ * offsetPx = popupHeight + TOP_PADDING - viewportHeight / 2
  *
  * @param {Array} candidates
  * @param {number} lat - Latitude in degrees
  * @param {number} zoom - Target zoom level
+ * @param {number} [viewportHeight] - Viewport height in pixels
  * @returns {Promise<number>} Latitude offset in degrees
  */
-export async function prepareFlyToOffset(candidates, lat, zoom) {
+export async function prepareFlyToOffset(candidates, lat, zoom, viewportHeight) {
   const sizes = await preloadImageSizes(candidates)
   const fullHeightPx = computePopupOffsetPx(candidates, sizes)
-  return pixelOffsetToLatOffset(lat, zoom, fullHeightPx / 2)
+
+  const offsetPx = viewportHeight != null
+    ? fullHeightPx + TOP_PADDING - viewportHeight / 2
+    : fullHeightPx / 2  // fallback: simple centering without viewport
+
+  return pixelOffsetToLatOffset(lat, zoom, offsetPx)
 }

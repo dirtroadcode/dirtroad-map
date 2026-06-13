@@ -41,8 +41,41 @@ body,
 }
 
 /* Popup cards */
+/* Popup open/close transition — applied to the content wrapper
+   since MapLibre uses inline transform on the popup container */
 .maplibregl-popup-content {
-  background: #1a2744;
+  animation: popup-fade-in 0.2s ease-out;
+}
+
+.maplibregl-popup-close .maplibregl-popup-content,
+.maplibregl-popup-close .maplibregl-popup-tip {
+  animation: popup-fade-out 0.15s ease-in forwards;
+}
+
+@keyframes popup-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes popup-fade-out {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+.maplibregl-popup-content {
+  background: #0a2a40;
   color: #fff;
   border-radius: 8px;
   padding: 12px;
@@ -52,7 +85,7 @@ body,
 }
 
 .maplibregl-popup-tip {
-  border-top-color: #1a2744;
+  border-top-color: #001725;
 }
 
 .popup-card {
@@ -107,7 +140,7 @@ a.popup-name:hover {
   flex-direction: column;
   gap: 8px;
   padding: 14px 18px;
-  background: rgba(26, 39, 68, 0.65);
+  background: rgba(0, 23, 37, 0.65);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-radius: 10px;

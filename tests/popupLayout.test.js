@@ -150,25 +150,35 @@ describe('prepareFlyToOffset', () => {
 
     const dlat = await prepareFlyToOffset(candidates, lat, zoom, viewportHeight)
 
-    // Compute expected offset: popup sits between top padding and marker,
-    // marker at (popupHeight + TOP_PADDING) from top, centered means:
-    //   offsetPx = popupHeight + TOP_PADDING - viewportHeight / 2
+    // Compute expected offset — clamped to 0 (no negative offsets)
     const fullHeightPx = computePopupOffsetPx(candidates, new Map())
     const TOP_PADDING = 16
-    const expectedPx = fullHeightPx + TOP_PADDING - viewportHeight / 2
+    const expectedPx = Math.max(0, fullHeightPx + TOP_PADDING - viewportHeight / 2)
     const expectedDlat = pixelOffsetToLatOffset(lat, zoom, expectedPx)
 
     expect(dlat).toBeCloseTo(expectedDlat, 10)
   })
 
-  it('shorter viewport pushes marker further below center — popup fills the view', async () => {
+  it('never produces a negative offset — marker must not go above viewport center', async () => {
+    // No-photo candidate: popup is small (~147px) vs large viewport (900px).
+    // Without clamping, offsetPx = 147 + 16 - 450 = -287 → marker pinned at top.
     const candidates = [{ ...baseCandidate, photo: '' }]
+    const dlat = await prepareFlyToOffset(candidates, 40, 6, 900)
+
+    // Offset should be zero or positive — marker never above center
+    expect(dlat).toBeGreaterThanOrEqual(0)
+  })
+
+  it('shorter viewport pushes marker further below center — popup fills the view', async () => {
+    // Use multiple no-photo candidates to get a tall popup that produces
+    // positive offsets on both viewports — avoids image preload timeouts
+    const candidates = [baseCandidate, baseCandidate, baseCandidate]
 
     const shortDlat = await prepareFlyToOffset(candidates, 40, 8, 400)
     const tallDlat = await prepareFlyToOffset(candidates, 40, 8, 900)
 
     // Short viewport → popup takes up more of the view → marker pushed further down → larger dlat
-    // Tall viewport → popup is small → marker stays near top → smaller (or negative) dlat
+    // Tall viewport → popup is small relative to viewport → marker stays closer to center → smaller dlat
     expect(shortDlat).toBeGreaterThan(tallDlat)
   })
 })

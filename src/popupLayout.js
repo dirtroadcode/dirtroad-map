@@ -130,7 +130,7 @@ export async function prepareFlyToOffset(candidates, lat, zoom, viewportHeight) 
   const fullHeightPx = computePopupOffsetPx(candidates, sizes)
 
   const offsetPx = viewportHeight != null
-    ? fullHeightPx + TOP_PADDING - viewportHeight / 2
+    ? Math.max(0, fullHeightPx + TOP_PADDING - viewportHeight / 2)
     : fullHeightPx / 2  // fallback: simple centering without viewport
 
   return pixelOffsetToLatOffset(lat, zoom, offsetPx)

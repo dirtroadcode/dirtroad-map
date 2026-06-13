@@ -1,6 +1,7 @@
 import maplibregl from 'maplibre-gl'
 import { createDeck } from './deck.js'
 import { renderPopupContent } from './popupRenderer.js'
+import { prepareFlyToOffset } from './popupLayout.js'
 
 const INITIAL_HOLD_MS = 2000
 const POPUP_HOLD_MS = 5000
@@ -51,13 +52,18 @@ export function startKiosk(map, geojson) {
     container.addEventListener(event, kill, { once: true })
   })
 
+  function parseCandidates(feature) {
+    const raw = feature.properties.candidates
+    return raw ? (typeof raw === 'string' ? JSON.parse(raw) : raw) : []
+  }
+
   function openPopup(feature) {
     if (killed) return
 
     const candidates = feature.properties.candidates
     if (!candidates) return
 
-    const parsed = typeof candidates === 'string' ? JSON.parse(candidates) : candidates
+    const parsed = parseCandidates(feature)
     const html = renderPopupContent(parsed)
     const [lng, lat] = feature.geometry.coordinates
 
@@ -106,7 +112,7 @@ export function startKiosk(map, geojson) {
 
   map.on('moveend', onMoveEnd)
 
-  function flyToNext() {
+  async function flyToNext() {
     if (killed) return
 
     // Unhighlight previous feature
@@ -124,12 +130,20 @@ export function startKiosk(map, geojson) {
       { lat, lng }
     )
 
+    // Await the deep module: preload images → compute height → lat offset
+    const dlat = await prepareFlyToOffset(
+      parseCandidates(feature),
+      lat,
+      8,
+    )
+
+    if (killed) return  // may have been killed while awaiting
+
     map.flyTo({
-      center: [lng, lat],
+      center: [lng, lat + dlat],
       zoom: 8,
       curve: 1.42,
       duration,
-      padding: { top: 80, bottom: 0, left: 0, right: 0 },
       easing(t) { return t },
     })
   }

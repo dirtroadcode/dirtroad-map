@@ -174,6 +174,9 @@ describe('startKiosk', () => {
     // Fire moveend
     moveEndHandler()
 
+    // Popup is deferred via requestAnimationFrame — flush it
+    await new Promise(r => requestAnimationFrame(r))
+
     // Should have called renderPopupContent with the feature's candidates
     expect(renderPopupContent).toHaveBeenCalledWith(candidates)
   })

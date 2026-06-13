@@ -97,7 +97,11 @@ export function startKiosk(map, geojson) {
       previousFeature = currentFeature
     }
 
-    openPopup(currentFeature)
+    // Defer popup to next frame — moveend fires before final render,
+    // so the popup would flash at [0,0] for one frame otherwise
+    requestAnimationFrame(() => {
+      openPopup(currentFeature)
+    })
 
     // Hold popup for N seconds, then close and fly to next
     timer = setTimeout(() => {

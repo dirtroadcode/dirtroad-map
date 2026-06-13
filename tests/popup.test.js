@@ -97,6 +97,41 @@ describe('renderPopupCard', () => {
 
     expect(html).not.toContain('District')
   })
+
+  it('applies inline width, height, and object-fit when photoSize is provided', () => {
+    const html = renderPopupCard({
+      name: 'Sized Photo',
+      office: 'Mayor',
+      district: '',
+      state: 'Oregon',
+      photo: 'https://example.com/sized.webp',
+      website: '',
+      town: '',
+      cycle: '2026',
+    }, { photoWidth: 180, photoHeight: 320 })
+
+    expect(html).toContain('width="180"')
+    expect(html).toContain('height="320"')
+    expect(html).toContain('object-fit: cover')
+  })
+
+  it('uses default CSS sizing when photoSize is not provided', () => {
+    const html = renderPopupCard({
+      name: 'Default Size',
+      office: 'Mayor',
+      district: '',
+      state: 'Oregon',
+      photo: 'https://example.com/default.webp',
+      website: '',
+      town: '',
+      cycle: '2026',
+    })
+
+    expect(html).toContain('popup-photo')
+    expect(html).not.toContain('width="')
+    expect(html).not.toContain('height="')
+    expect(html).not.toContain('object-fit')
+  })
 })
 
 describe('renderPopupContent', () => {
@@ -125,6 +160,15 @@ describe('renderPopupContent', () => {
     expect(html).toContain('First')
     expect(html).toContain('Second')
     expect(html).toContain('popup-divider')
+  })
+
+  it('passes photoSize through to each card', () => {
+    const html = renderPopupContent([
+      { name: 'A', office: 'Mayor', district: '', state: 'OR', photo: 'https://example.com/a.webp', website: '', town: '', cycle: '2026' },
+    ], { photoWidth: 150, photoHeight: 200 })
+
+    expect(html).toContain('width="150"')
+    expect(html).toContain('height="200"')
   })
 })
 
@@ -209,5 +253,31 @@ describe('attachPopupHandlers', () => {
     bgHandler({})
 
     expect(popupCloses).toHaveLength(1)
+  })
+
+  it('applies viewport-aware photo sizing when candidate has a photo', () => {
+    const container = document.createElement('div')
+    Object.defineProperty(container, 'clientHeight', { value: 600, configurable: true })
+
+    const map = createMockMap()
+    map.getContainer = vi.fn(() => container)
+    map.queryRenderedFeatures = vi.fn().mockReturnValue([
+      {
+        properties: {
+          candidates: [{ name: 'Photo Candidate', office: 'Mayor', district: '', state: 'OR', photo: 'https://example.com/photo.webp', website: '', town: '', cycle: '2026' }],
+        },
+      },
+    ])
+
+    attachPopupHandlers(map)
+
+    const handler = map._listeners['click:candidates-state-glow'][0]
+    handler({ lngLat: { lng: -85, lat: 35 }, point: { x: 100, y: 100 } })
+
+    expect(popupOpens).toHaveLength(1)
+    // Photo should have inline width/height (viewport-scaled)
+    expect(popupOpens[0].html).toContain('width="')
+    expect(popupOpens[0].html).toContain('height="')
+    expect(popupOpens[0].html).toContain('object-fit: cover')
   })
 })

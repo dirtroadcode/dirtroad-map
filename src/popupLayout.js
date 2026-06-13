@@ -109,6 +109,62 @@ export function preloadImageSizes(candidates, timeoutMs = 3000) {
 }
 
 const TOP_PADDING = 16  // space above popup in viewport
+const VIEWPORT_FILL = 0.9
+const MIN_PHOTO_HEIGHT = 100
+
+/**
+ * Compute non-photo chrome height for a set of candidates.
+ * Includes arrows, margins, padding, text elements, gaps, and dividers.
+ *
+ * @param {Array} candidates
+ * @returns {number} Chrome height in pixels
+ */
+function computeChromeHeight(candidates) {
+  let h = POPUP_ARROW + VIEWPORT_MARGIN + CONTENT_PADDING + POPUP_OFFSET
+
+  for (let i = 0; i < candidates.length; i++) {
+    if (i > 0) h += DIVIDER_HEIGHT
+    const c = candidates[i]
+    let items = 0
+    // Name always present
+    h += NAME_HEIGHT; items++
+    if (c.state) { h += DETAIL_HEIGHT; items++ }
+    h += OFFICE_HEIGHT; items++
+    if (c.district) { h += DETAIL_HEIGHT; items++ }
+    if (c.town) { h += DETAIL_HEIGHT; items++ }
+    h += Math.max(0, items - 1) * GAP
+    // Add gap for photo if present (photo adds 1 more item)
+    if (c.photo) h += GAP
+  }
+
+  return h
+}
+
+/**
+ * Compute the target photo dimensions so the popup fills ~90% of the viewport.
+ * The photo is the flex element — all remaining space after chrome is photo space.
+ * Width is derived from the first candidate's photo aspect ratio.
+ *
+ * @param {number} viewportHeight - Viewport height in pixels
+ * @param {Array} candidates - Candidate data objects
+ * @param {Map<string, {width: number, height: number}>} imageSizes - Natural dimensions per photo URL
+ * @returns {{ photoWidth: number, photoHeight: number }} Target photo dimensions (0,0 if no photo)
+ */
+export function computeTargetPhotoSize(viewportHeight, candidates, imageSizes) {
+  const photoCandidate = candidates.find(c => c.photo)
+  if (!photoCandidate) return { photoWidth: 0, photoHeight: 0 }
+
+  const chrome = computeChromeHeight(candidates)
+  const available = Math.max(MIN_PHOTO_HEIGHT, Math.round(VIEWPORT_FILL * viewportHeight - chrome))
+
+  const dims = imageSizes.get(photoCandidate.photo)
+  const aspectRatio = (dims && dims.width > 0) ? dims.width / dims.height : 1
+
+  return {
+    photoHeight: available,
+    photoWidth: Math.round(available * aspectRatio),
+  }
+}
 
 /**
  * Deep module: preloads images, computes popup height, and converts to
@@ -134,4 +190,41 @@ export async function prepareFlyToOffset(candidates, lat, zoom, viewportHeight) 
     : fullHeightPx / 2  // fallback: simple centering without viewport
 
   return pixelOffsetToLatOffset(lat, zoom, offsetPx)
+}
+
+/**
+ * Deep module: preloads images, computes photo sizing to fill ~90% of the
+ * viewport, and calculates the latitude offset so the popup top is at ~5%
+ * of the viewport height (with the dot at ~95%).
+ *
+ * Returns everything the caller needs in a single object — no need to
+ * separately compute photo sizes or manage image preloading.
+ *
+ * @param {Array} candidates
+ * @param {number} lat - Latitude in degrees
+ * @param {number} zoom - Target zoom level
+ * @param {number} [viewportHeight] - Viewport height in pixels
+ * @returns {Promise<{ dlat: number, photoWidth: number, photoHeight: number }>}
+ */
+export async function prepareLayout(candidates, lat, zoom, viewportHeight) {
+  const imageSizes = await preloadImageSizes(candidates)
+  const photoSize = viewportHeight != null
+    ? computeTargetPhotoSize(viewportHeight, candidates, imageSizes)
+    : { photoWidth: 0, photoHeight: 0 }
+
+  // Compute total popup height with the scaled photo
+  const chrome = computeChromeHeight(candidates)
+  const totalHeight = chrome + photoSize.photoHeight
+
+  // Center the camera so popup top is at 5% of viewport, dot at 95%
+  // offsetPx = totalHeight - 0.45 * viewportHeight
+  const offsetPx = viewportHeight != null
+    ? Math.max(0, totalHeight - 0.45 * viewportHeight)
+    : totalHeight / 2
+
+  return {
+    dlat: pixelOffsetToLatOffset(lat, zoom, offsetPx),
+    photoWidth: photoSize.photoWidth,
+    photoHeight: photoSize.photoHeight,
+  }
 }

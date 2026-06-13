@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { computePopupOffsetPx, pixelOffsetToLatOffset, prepareFlyToOffset } from '../src/popupLayout.js'
+import { computePopupOffsetPx, pixelOffsetToLatOffset, prepareFlyToOffset, computeTargetPhotoSize, prepareLayout } from '../src/popupLayout.js'
 
 const baseCandidate = {
   name: 'Jane Doe',
@@ -180,5 +180,124 @@ describe('prepareFlyToOffset', () => {
     // Short viewport → popup takes up more of the view → marker pushed further down → larger dlat
     // Tall viewport → popup is small relative to viewport → marker stays closer to center → smaller dlat
     expect(shortDlat).toBeGreaterThan(tallDlat)
+  })
+})
+
+describe('computeTargetPhotoSize', () => {
+  it('fills remaining viewport space after subtracting chrome', () => {
+    const viewportHeight = 600
+    const candidates = [{
+      ...baseCandidate,
+      photo: 'https://example.com/photo.webp',
+    }]
+    const imageSizes = new Map([
+      ['https://example.com/photo.webp', { width: 400, height: 600 }],
+    ])
+
+    const size = computeTargetPhotoSize(viewportHeight, candidates, imageSizes)
+
+    // Total popup height at fixed 200px width would be:
+    // arrow(12) + margin(16) + padding(24) + popupOffset(12) + photo(300) + name(22) + state(16) + office(17) + gaps(12) = 431
+    // 90% of viewport = 540. Available for photo = 540 - (431 - 300) = 540 - 131 = 409
+    // Width derived from aspect ratio: 409 * (400/600) ≈ 273
+    expect(size.photoHeight).toBeGreaterThan(0)
+    expect(size.photoWidth).toBeGreaterThan(0)
+
+    // Chrome (non-photo content) should be ~131px
+    // 0.9 * 600 = 540 available. 540 - 131 chrome = 409 for photo
+    expect(size.photoHeight).toBe(409)
+  })
+
+  it('derives width from image aspect ratio', () => {
+    const viewportHeight = 800
+    const candidates = [{
+      ...baseCandidate,
+      photo: 'https://example.com/square.webp',
+    }]
+    const imageSizes = new Map([
+      ['https://example.com/square.webp', { width: 500, height: 500 }],
+    ])
+
+    const size = computeTargetPhotoSize(viewportHeight, candidates, imageSizes)
+
+    // Square image → width should equal height
+    expect(size.photoWidth).toBe(size.photoHeight)
+  })
+
+  it('clamps to minimum height so tiny viewports do not collapse', () => {
+    const viewportHeight = 100 // very small viewport
+    const candidates = [{
+      ...baseCandidate,
+      photo: 'https://example.com/photo.webp',
+    }]
+    const imageSizes = new Map([
+      ['https://example.com/photo.webp', { width: 400, height: 600 }],
+    ])
+
+    const size = computeTargetPhotoSize(viewportHeight, candidates, imageSizes)
+
+    // Even on tiny viewports, photo should not collapse
+    expect(size.photoHeight).toBeGreaterThanOrEqual(100)
+  })
+
+  it('returns zero dimensions when no candidate has a photo', () => {
+    const viewportHeight = 600
+    const candidates = [{ ...baseCandidate, photo: '' }]
+
+    const size = computeTargetPhotoSize(viewportHeight, candidates, new Map())
+
+    // No photo → no sizing needed
+    expect(size.photoHeight).toBe(0)
+    expect(size.photoWidth).toBe(0)
+  })
+})
+
+describe('prepareLayout', () => {
+  it('returns dlat, photoWidth, and photoHeight from a single call', async () => {
+    const candidates = [{
+      ...baseCandidate,
+      photo: 'https://example.com/photo.webp',
+    }]
+    const layout = await prepareLayout(candidates, 40, 8, 600)
+
+    expect(typeof layout.dlat).toBe('number')
+    expect(typeof layout.photoWidth).toBe('number')
+    expect(typeof layout.photoHeight).toBe('number')
+    expect(layout.dlat).toBeGreaterThan(0)
+    expect(layout.photoHeight).toBeGreaterThan(0)
+    expect(layout.photoWidth).toBeGreaterThan(0)
+  })
+
+  it('positions popup top at ~5% of viewport for 90% fill', async () => {
+    const candidates = [{
+      ...baseCandidate,
+      photo: 'https://example.com/photo.webp',
+    }]
+    const viewportHeight = 600
+    const lat = 40
+    const zoom = 8
+
+    const layout = await prepareLayout(candidates, lat, zoom, viewportHeight)
+
+    // The popup should fill 90% of the viewport.
+    // Camera center should be offset so popup top is at ~5% (30px) from top.
+    // offsetPx = 0.05 * viewportHeight + totalPopupHeight - viewportHeight / 2
+    // where totalPopupHeight = chrome + photoHeight
+    //
+    // We can verify by converting dlat back to pixels and checking
+    // that popup top is near 5% of viewport.
+    const dlatPx = layout.dlat / pixelOffsetToLatOffset(lat, zoom, 1)
+    const totalHeight = dlatPx + viewportHeight / 2 - 0.05 * viewportHeight
+    const popupTop = viewportHeight / 2 - dlatPx
+    // popupTop should be approximately 5% of viewport
+    expect(popupTop).toBeCloseTo(0.05 * viewportHeight, -1) // within ~10px
+  })
+
+  it('returns zero photo dimensions when no candidate has a photo', async () => {
+    const candidates = [{ ...baseCandidate, photo: '' }]
+    const layout = await prepareLayout(candidates, 40, 8, 600)
+
+    expect(layout.photoWidth).toBe(0)
+    expect(layout.photoHeight).toBe(0)
   })
 })

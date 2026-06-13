@@ -1,7 +1,7 @@
 import { createPopupManager } from './popupManager.js'
 import { createDeck } from './deck.js'
 import { renderPopupContent } from './popupRenderer.js'
-import { prepareFlyToOffset } from './popupLayout.js'
+import { prepareLayout } from './popupLayout.js'
 
 const INITIAL_HOLD_MS = 2000
 const POPUP_HOLD_MS = 3000
@@ -39,6 +39,7 @@ export function startKiosk(map, geojson) {
   const popup = createPopupManager(map)
   let currentFeature = null
   let previousFeature = null
+  let currentLayout = null
 
   function kill() {
     killed = true
@@ -64,7 +65,10 @@ export function startKiosk(map, geojson) {
     if (!candidates) return
 
     const parsed = parseCandidates(feature)
-    const html = renderPopupContent(parsed)
+    const photoSize = currentLayout
+      ? { photoWidth: currentLayout.photoWidth, photoHeight: currentLayout.photoHeight }
+      : undefined
+    const html = renderPopupContent(parsed, photoSize)
     const [lng, lat] = feature.geometry.coordinates
 
     popup.open(html, [lng, lat])
@@ -119,14 +123,16 @@ export function startKiosk(map, geojson) {
       { lat, lng }
     )
 
-    // Await the deep module: preload images → compute height → lat offset
+    // Await the deep module: preload images → compute sizing → lat offset
     const viewportHeight = map.getContainer().clientHeight
-    const dlat = await prepareFlyToOffset(
+    const layout = await prepareLayout(
       parseCandidates(feature),
       lat,
       6,
       viewportHeight,
     )
+    currentLayout = layout
+    const dlat = layout.dlat
 
     if (killed) return  // may have been killed while awaiting
 

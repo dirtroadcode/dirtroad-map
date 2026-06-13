@@ -280,5 +280,58 @@ describe('attachPopupHandlers', () => {
     expect(popupOpens[0].html).toMatch(/width:\s*\d+px/)
     expect(popupOpens[0].html).toMatch(/height:\s*\d+px/)
     expect(popupOpens[0].html).toContain('object-fit: cover')
+    // Should pass maxWidth from layout
+    expect(popupOpens[0].opts).toBeDefined()
+    expect(popupOpens[0].opts.maxWidth).toBeGreaterThan(0)
+  })
+
+  it('eases map center south when popup would extend above viewport', async () => {
+    const container = document.createElement('div')
+    Object.defineProperty(container, 'clientHeight', { value: 600, configurable: true })
+
+    const map = createMockMap()
+    map.getContainer = vi.fn(() => container)
+    map.queryRenderedFeatures = vi.fn().mockReturnValue([
+      {
+        properties: {
+          candidates: [{ name: 'Tall Popup', office: 'Governor', district: '', state: 'TX', photo: 'https://example.com/tall.webp', website: '', town: '', cycle: '2026' }],
+        },
+      },
+    ])
+
+    attachPopupHandlers(map)
+
+    const handler = map._listeners['click:candidates-state-glow'][0]
+    await handler({ lngLat: { lng: -85, lat: 35 }, point: { x: 100, y: 100 } })
+
+    // Should have called easeTo to push the center south so popup fits
+    expect(map.easeTo).toHaveBeenCalledTimes(1)
+    const easeOpts = map.easeTo.mock.calls[0][0]
+    expect(easeOpts.center[0]).toBe(-85) // same longitude
+    expect(easeOpts.center[1]).toBeGreaterThan(35) // latitude pushed south
+    expect(easeOpts.duration).toBe(200)
+  })
+
+  it('does not ease camera when popup offset is zero (no photo)', async () => {
+    const container = document.createElement('div')
+    Object.defineProperty(container, 'clientHeight', { value: 600, configurable: true })
+
+    const map = createMockMap()
+    map.getContainer = vi.fn(() => container)
+    map.queryRenderedFeatures = vi.fn().mockReturnValue([
+      {
+        properties: {
+          candidates: [{ name: 'No Photo', office: 'Mayor', district: '', state: 'OR', photo: '', website: '', town: '', cycle: '2026' }],
+        },
+      },
+    ])
+
+    attachPopupHandlers(map)
+
+    const handler = map._listeners['click:candidates-state-glow'][0]
+    await handler({ lngLat: { lng: -85, lat: 35 }, point: { x: 100, y: 100 } })
+
+    // No photo → small popup → no offset needed → no easeTo
+    expect(map.easeTo).not.toHaveBeenCalled()
   })
 })

@@ -38,9 +38,10 @@ vi.mock('../src/deck.js', () => ({
 /**
  * Creates a mock MapLibre map that spies on flyTo, setFeatureState, etc.
  */
-function createMockMap() {
+function createMockMap(viewportHeight = 600) {
   const container = document.createElement('div')
   Object.defineProperty(container, 'addEventListener', { value: vi.fn() })
+  Object.defineProperty(container, 'clientHeight', { value: viewportHeight })
 
   return {
     flyTo: vi.fn(),
@@ -341,6 +342,7 @@ describe('startKiosk', () => {
       expect.arrayContaining([expect.objectContaining({ name: 'Test Candidate' })]),
       35.0,
       8,
+      600, // viewport height from createMockMap default
     )
   })
 })

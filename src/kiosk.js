@@ -131,10 +131,12 @@ export function startKiosk(map, geojson) {
     )
 
     // Await the deep module: preload images → compute height → lat offset
+    const viewportHeight = map.getContainer().clientHeight
     const dlat = await prepareFlyToOffset(
       parseCandidates(feature),
       lat,
       8,
+      viewportHeight,
     )
 
     if (killed) return  // may have been killed while awaiting

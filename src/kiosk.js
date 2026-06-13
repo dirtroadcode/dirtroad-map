@@ -4,10 +4,10 @@ import { renderPopupContent } from './popupRenderer.js'
 import { prepareFlyToOffset } from './popupLayout.js'
 
 const INITIAL_HOLD_MS = 2000
-const POPUP_HOLD_MS = 5000
+const POPUP_HOLD_MS = 3000
 const PAUSE_MS = 500
-const DURATION_MIN_MS = 4000
-const DURATION_MAX_MS = 12000
+const DURATION_MIN_MS = 2000
+const DURATION_MAX_MS = 6000
 
 /**
  * Calculate fly duration in ms based on distance between two points.
@@ -79,10 +79,14 @@ export function startKiosk(map, geojson) {
   }
 
   function closePopup() {
-    if (currentPopup) {
-      currentPopup.remove()
-      currentPopup = null
-    }
+    if (!currentPopup) return
+    const el = currentPopup.getElement()
+    el.classList.add('maplibregl-popup-close')
+    const popup = currentPopup
+    currentPopup = null
+    setTimeout(() => {
+      popup.remove()
+    }, 150)
   }
 
   function onMoveEnd() {
@@ -139,7 +143,7 @@ export function startKiosk(map, geojson) {
     const dlat = await prepareFlyToOffset(
       parseCandidates(feature),
       lat,
-      8,
+      6,
       viewportHeight,
     )
 
@@ -147,10 +151,18 @@ export function startKiosk(map, geojson) {
 
     map.flyTo({
       center: [lng, lat + dlat],
-      zoom: 8,
+      zoom: 6,
       curve: 1.42,
       duration,
-      easing(t) { return t },
+      easing(t) {
+        // Piecewise: fast quadratic ease-in → capped cruise → smooth ease-out
+        const a = 0.2, b = 0.7
+        const S = 2 / (1 + b - a) // max slope ≈1.33, derived so f(1)=1
+        if (t <= a) return S * t * t / (2 * a)
+        if (t <= b) return S * a / 2 + S * (t - a)
+        const dt = t - b, dur = 1 - b
+        return S * a / 2 + S * (b - a) + S * dt - S * dt * dt / (2 * dur)
+      },
     })
   }
 

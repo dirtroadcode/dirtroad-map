@@ -1,6 +1,5 @@
 import { createPopupManager } from './popupManager.js'
 import { createDeck } from './deck.js'
-import { renderPopupContent } from './popupRenderer.js'
 import { prepareLayout } from './popupLayout.js'
 
 const INITIAL_HOLD_MS = 2000
@@ -59,21 +58,10 @@ export function startKiosk(map, geojson) {
   }
 
   function openKioskPopup(feature) {
-    if (killed) return
+    if (killed || !currentLayout) return
 
-    const candidates = feature.properties.candidates
-    if (!candidates) return
-
-    const parsed = parseCandidates(feature)
-    const html = currentLayout
-      ? currentLayout.html
-      : renderPopupContent(parsed)
-    const maxWidth = currentLayout
-      ? currentLayout.maxWidth
-      : undefined
     const [lng, lat] = feature.geometry.coordinates
-
-    popup.open(html, [lng, lat], { maxWidth })
+    popup.open(currentLayout.html, [lng, lat], { maxWidth: currentLayout.maxWidth })
   }
 
   function onMoveEnd() {

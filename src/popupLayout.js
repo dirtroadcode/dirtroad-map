@@ -196,17 +196,17 @@ export async function prepareFlyToOffset(candidates, lat, zoom, viewportHeight) 
 
 /**
  * Deep module: preloads images, computes photo sizing to fill ~90% of the
- * viewport, and calculates the latitude offset so the popup top is at ~5%
- * of the viewport height (with the dot at ~95%).
+ * viewport, renders popup HTML with inline-styled photo dimensions, and
+ * calculates the latitude offset so the popup top is at ~5% of viewport.
  *
  * Returns everything the caller needs in a single object — no need to
- * separately compute photo sizes or manage image preloading.
+ * separately compute photo sizes, render HTML, or manage image preloading.
  *
  * @param {Array} candidates
  * @param {number} lat - Latitude in degrees
  * @param {number} zoom - Target zoom level
  * @param {number} [viewportHeight] - Viewport height in pixels
- * @returns {Promise<{ dlat: number, photoWidth: number, photoHeight: number }>}
+ * @returns {Promise<{ dlat: number, html: string, maxWidth: number|string, photoWidth: number, photoHeight: number }>}
  */
 export async function prepareLayout(candidates, lat, zoom, viewportHeight) {
   const imageSizes = await preloadImageSizes(candidates)

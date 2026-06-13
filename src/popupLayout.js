@@ -4,6 +4,8 @@ const POPUP_ARROW = 12
 const VIEWPORT_MARGIN = 16
 const CONTENT_PADDING = 24  // .maplibregl-popup-content padding: 12px × 2
 const POPUP_OFFSET = 12      // Popup constructor offset param
+const MAX_PHOTO_WIDTH = 300
+const MAX_PHOTO_HEIGHT_RATIO = 0.6
 
 import { renderPopupContent } from './popupRenderer.js'
 
@@ -162,9 +164,20 @@ export function computeTargetPhotoSize(viewportHeight, candidates, imageSizes) {
   const dims = imageSizes.get(photoCandidate.photo)
   const aspectRatio = (dims && dims.width > 0) ? dims.width / dims.height : 1
 
+  // Cap height to a fraction of viewport
+  const maxHeight = Math.round(MAX_PHOTO_HEIGHT_RATIO * viewportHeight)
+  let photoHeight = Math.min(available, maxHeight)
+  let photoWidth = Math.round(photoHeight * aspectRatio)
+
+  // Cap width — scale height proportionally if width exceeds max
+  if (photoWidth > MAX_PHOTO_WIDTH) {
+    photoWidth = MAX_PHOTO_WIDTH
+    photoHeight = Math.round(photoWidth / aspectRatio)
+  }
+
   return {
-    photoHeight: available,
-    photoWidth: Math.round(available * aspectRatio),
+    photoHeight,
+    photoWidth,
   }
 }
 
@@ -206,7 +219,7 @@ export async function prepareFlyToOffset(candidates, lat, zoom, viewportHeight) 
  * @param {number} lat - Latitude in degrees
  * @param {number} zoom - Target zoom level
  * @param {number} [viewportHeight] - Viewport height in pixels
- * @returns {Promise<{ dlat: number, html: string, maxWidth: number|string, photoWidth: number, photoHeight: number }>}
+ * @returns {Promise<{ dlat: number, html: string, maxWidth: string, photoWidth: number, photoHeight: number }>}
  */
 export async function prepareLayout(candidates, lat, zoom, viewportHeight) {
   const imageSizes = await preloadImageSizes(candidates)
@@ -228,8 +241,9 @@ export async function prepareLayout(candidates, lat, zoom, viewportHeight) {
   const html = renderPopupContent(candidates, photoSize)
 
   // Compute maxWidth to accommodate the photo (or default)
+  // Always return a CSS string with px unit — bare numbers are invalid CSS
   const maxWidth = photoSize.photoWidth > 0
-    ? photoSize.photoWidth + CONTENT_PADDING
+    ? `${photoSize.photoWidth + CONTENT_PADDING}px`
     : '300px'
 
   return {

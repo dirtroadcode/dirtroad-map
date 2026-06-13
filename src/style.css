@@ -41,12 +41,14 @@ body,
 }
 
 /* Popup cards */
-/* Popup open/close transition */
-.maplibregl-popup {
+/* Popup open/close transition — applied to the content wrapper
+   since MapLibre uses inline transform on the popup container */
+.maplibregl-popup-content {
   animation: popup-fade-in 0.2s ease-out;
 }
 
-.maplibregl-popup.maplibregl-popup-close {
+.maplibregl-popup-close .maplibregl-popup-content,
+.maplibregl-popup-close .maplibregl-popup-tip {
   animation: popup-fade-out 0.15s ease-in forwards;
 }
 

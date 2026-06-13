@@ -110,8 +110,8 @@ describe('renderPopupCard', () => {
       cycle: '2026',
     }, { photoWidth: 180, photoHeight: 320 })
 
-    expect(html).toContain('width="180"')
-    expect(html).toContain('height="320"')
+    expect(html).toContain('width: 180px')
+    expect(html).toContain('height: 320px')
     expect(html).toContain('object-fit: cover')
   })
 
@@ -128,9 +128,7 @@ describe('renderPopupCard', () => {
     })
 
     expect(html).toContain('popup-photo')
-    expect(html).not.toContain('width="')
-    expect(html).not.toContain('height="')
-    expect(html).not.toContain('object-fit')
+    expect(html).not.toContain('style="')
   })
 })
 
@@ -167,8 +165,8 @@ describe('renderPopupContent', () => {
       { name: 'A', office: 'Mayor', district: '', state: 'OR', photo: 'https://example.com/a.webp', website: '', town: '', cycle: '2026' },
     ], { photoWidth: 150, photoHeight: 200 })
 
-    expect(html).toContain('width="150"')
-    expect(html).toContain('height="200"')
+    expect(html).toContain('width: 150px')
+    expect(html).toContain('height: 200px')
   })
 })
 
@@ -186,6 +184,9 @@ describe('attachPopupHandlers', () => {
           listeners[key].push(handler)
         }
       },
+      getCenter: vi.fn(() => ({ lng: -85, lat: 35 })),
+      getZoom: vi.fn(() => 6),
+      easeTo: vi.fn(),
       _listeners: listeners,
     }
     return map
@@ -211,7 +212,7 @@ describe('attachPopupHandlers', () => {
     }
   })
 
-  it('opens a popup with candidate content when a candidate layer is clicked', () => {
+  it('opens a popup with candidate content when a candidate layer is clicked', async () => {
     const map = createMockMap()
     map.queryRenderedFeatures = vi.fn().mockReturnValue([
       {
@@ -224,7 +225,7 @@ describe('attachPopupHandlers', () => {
     attachPopupHandlers(map)
 
     const handler = map._listeners['click:candidates-state-glow'][0]
-    handler({ lngLat: { lng: -85, lat: 35 }, point: { x: 100, y: 100 } })
+    await handler({ lngLat: { lng: -85, lat: 35 }, point: { x: 100, y: 100 } })
 
     expect(map.queryRenderedFeatures).toHaveBeenCalledWith(
       { x: 100, y: 100 },
@@ -237,7 +238,7 @@ describe('attachPopupHandlers', () => {
     expect(popupOpens[0].map).toBe(map)
   })
 
-  it('closes popup when map background is clicked', () => {
+  it('closes popup when map background is clicked', async () => {
     const map = createMockMap()
     map.queryRenderedFeatures = vi.fn()
       .mockReturnValueOnce([{ properties: { candidates: [{ name: 'A', office: 'O', district: '', state: 'S', photo: '', website: '', town: '', cycle: '2026' }] } }])
@@ -246,7 +247,7 @@ describe('attachPopupHandlers', () => {
 
     // First: click a candidate layer to open a popup
     const layerHandler = map._listeners['click:candidates-state-glow'][0]
-    layerHandler({ lngLat: { lng: -85, lat: 35 }, point: { x: 100, y: 100 } })
+    await layerHandler({ lngLat: { lng: -85, lat: 35 }, point: { x: 100, y: 100 } })
 
     // Then: click the map background to close it
     const bgHandler = map._listeners['click'][0]
@@ -255,7 +256,7 @@ describe('attachPopupHandlers', () => {
     expect(popupCloses).toHaveLength(1)
   })
 
-  it('applies viewport-aware photo sizing when candidate has a photo', () => {
+  it('applies viewport-aware photo sizing when candidate has a photo', async () => {
     const container = document.createElement('div')
     Object.defineProperty(container, 'clientHeight', { value: 600, configurable: true })
 
@@ -272,12 +273,12 @@ describe('attachPopupHandlers', () => {
     attachPopupHandlers(map)
 
     const handler = map._listeners['click:candidates-state-glow'][0]
-    handler({ lngLat: { lng: -85, lat: 35 }, point: { x: 100, y: 100 } })
+    await handler({ lngLat: { lng: -85, lat: 35 }, point: { x: 100, y: 100 } })
 
     expect(popupOpens).toHaveLength(1)
-    // Photo should have inline width/height (viewport-scaled)
-    expect(popupOpens[0].html).toContain('width="')
-    expect(popupOpens[0].html).toContain('height="')
+    // Photo should have inline-styled dimensions (viewport-scaled)
+    expect(popupOpens[0].html).toMatch(/width:\s*\d+px/)
+    expect(popupOpens[0].html).toMatch(/height:\s*\d+px/)
     expect(popupOpens[0].html).toContain('object-fit: cover')
   })
 })

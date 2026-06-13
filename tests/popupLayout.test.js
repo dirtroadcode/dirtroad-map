@@ -300,4 +300,33 @@ describe('prepareLayout', () => {
     expect(layout.photoWidth).toBe(0)
     expect(layout.photoHeight).toBe(0)
   })
+
+  it('returns html with inline-styled photo dimensions (not HTML attributes)', async () => {
+    const candidates = [{
+      ...baseCandidate,
+      name: 'Inline Styled',
+      photo: 'https://example.com/photo.webp',
+      website: 'https://example.com',
+    }]
+    const layout = await prepareLayout(candidates, 40, 8, 600)
+
+    expect(layout.html).toContain('Inline Styled')
+    // Inline style overrides CSS — HTML attributes would be overridden by .popup-photo { width: 200px }
+    expect(layout.html).toMatch(/style="[^"]*width:\s*\d+px/)
+    expect(layout.html).toMatch(/style="[^"]*height:\s*\d+px/)
+    expect(layout.html).toContain('object-fit: cover')
+    // Should NOT use HTML width/height attributes (CSS overrides them)
+    expect(layout.html).not.toMatch(/width="\d+"/)
+    expect(layout.html).not.toMatch(/height="\d+"/)
+  })
+
+  it('returns html without inline width/height when no photo', async () => {
+    const candidates = [{ ...baseCandidate, photo: '' }]
+    const layout = await prepareLayout(candidates, 40, 8, 600)
+
+    expect(layout.html).toContain(baseCandidate.name)
+    // No photo → no inline width/height style at all
+    expect(layout.html).not.toMatch(/width:\s*\d+px/)
+    expect(layout.html).not.toMatch(/height:\s*\d+px/)
+  })
 })

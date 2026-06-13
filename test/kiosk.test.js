@@ -20,7 +20,7 @@ vi.mock('../src/popupRenderer.js', () => ({
   renderPopupContent: vi.fn(() => '<div>mock popup</div>'),
 }))
 vi.mock('../src/popupLayout.js', () => ({
-  prepareLayout: vi.fn(() => Promise.resolve({ dlat: 0.5, photoWidth: 180, photoHeight: 300 })),
+  prepareLayout: vi.fn(() => Promise.resolve({ dlat: 0.5, photoWidth: 180, photoHeight: 300, html: '<div>mock popup</div>' })),
 }))
 vi.mock('../src/deck.js', () => ({
   createDeck: vi.fn((items) => {
@@ -185,8 +185,9 @@ describe('startKiosk', () => {
     // Popup is deferred via requestAnimationFrame — flush it
     await new Promise(r => requestAnimationFrame(r))
 
-    // Should have called renderPopupContent with the feature's candidates and layout
-    expect(renderPopupContent).toHaveBeenCalledWith(candidates, expect.objectContaining({ photoWidth: 180, photoHeight: 300 }))
+    // Should have opened a popup with the HTML from prepareLayout
+    expect(popupState.opens).toHaveLength(1)
+    expect(popupState.opens[0].html).toBe('<div>mock popup</div>')
   })
 
   it('highlights the active feature with setFeatureState', async () => {
@@ -272,8 +273,8 @@ describe('startKiosk', () => {
 
     // First flyTo (f1) uses default mock (dlat: 0.5), second gets a custom offset
     prepareLayout
-      .mockResolvedValueOnce({ dlat: 0.5, photoWidth: 180, photoHeight: 300 })  // f1
-      .mockResolvedValueOnce({ dlat: 1.5, photoWidth: 200, photoHeight: 350 })  // f2
+      .mockResolvedValueOnce({ dlat: 0.5, photoWidth: 180, photoHeight: 300, html: '<div>mock popup</div>' })  // f1
+      .mockResolvedValueOnce({ dlat: 1.5, photoWidth: 200, photoHeight: 350, html: '<div>mock popup</div>' })  // f2
 
     startKiosk(map, geojson)
     await vi.advanceTimersByTimeAsync(2100)
@@ -299,7 +300,7 @@ describe('startKiosk', () => {
     const geojson = makeGeoJSON([f1, f2])
 
     // First flyTo (f1) resolves fast, second (f2) resolves slowly
-    prepareLayout.mockResolvedValueOnce({ dlat: 0.5, photoWidth: 180, photoHeight: 300 })  // f1 — fast
+    prepareLayout.mockResolvedValueOnce({ dlat: 0.5, photoWidth: 180, photoHeight: 300, html: '<div>mock popup</div>' })  // f1 — fast
     let resolvePreload
     prepareLayout.mockImplementationOnce(() =>
       new Promise(r => { resolvePreload = r })
@@ -323,7 +324,7 @@ describe('startKiosk', () => {
     expect(map.flyTo).toHaveBeenCalledTimes(1)
 
     // Now resolve the slow preload
-    resolvePreload({ dlat: 2.5, photoWidth: 200, photoHeight: 400 })
+    resolvePreload({ dlat: 2.5, photoWidth: 200, photoHeight: 400, html: '<div>mock popup</div>' })
     await vi.advanceTimersByTimeAsync(0) // flush microtask queue
 
     // Now flyTo should have been called with the resolved offset
@@ -338,7 +339,7 @@ describe('startKiosk', () => {
     const geojson = makeGeoJSON([feature])
 
     // prepareLayout returns a specific offset for the first feature
-    prepareLayout.mockResolvedValueOnce({ dlat: 1.23, photoWidth: 190, photoHeight: 280 })
+    prepareLayout.mockResolvedValueOnce({ dlat: 1.23, photoWidth: 190, photoHeight: 280, html: '<div>mock popup</div>' })
 
     startKiosk(map, geojson)
     await vi.advanceTimersByTimeAsync(2100)
@@ -357,7 +358,7 @@ describe('startKiosk', () => {
     )
   })
 
-  it('passes photo sizing from prepareLayout to renderPopupContent', async () => {
+  it('uses prepareLayout html for popup content with photo sizing baked in', async () => {
     const map = createMockMap()
     const candidates = [
       { name: 'Jane Doe', office: 'Governor', state: 'Texas', photo: 'https://example.com/jane.webp', website: '', district: '', town: '', cycle: '2026' },
@@ -367,7 +368,7 @@ describe('startKiosk', () => {
     const geojson = makeGeoJSON([feature])
 
     prepareLayout.mockClear()
-    prepareLayout.mockResolvedValueOnce({ dlat: 0.5, photoWidth: 190, photoHeight: 280 })
+    prepareLayout.mockResolvedValueOnce({ dlat: 0.5, photoWidth: 190, photoHeight: 280, html: '<div>styled popup</div>' })
 
     startKiosk(map, geojson)
     await vi.advanceTimersByTimeAsync(2100)
@@ -377,10 +378,8 @@ describe('startKiosk', () => {
     moveEndHandler()
     await new Promise(r => requestAnimationFrame(r))
 
-    // renderPopupContent should have been called with photo sizing
-    expect(renderPopupContent).toHaveBeenCalledWith(
-      candidates,
-      { photoWidth: 190, photoHeight: 280 },
-    )
+    // Popup should use the html from prepareLayout (which has inline-styled photo dimensions)
+    expect(popupState.opens).toHaveLength(1)
+    expect(popupState.opens[0].html).toBe('<div>styled popup</div>')
   })
 })

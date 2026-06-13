@@ -97,7 +97,7 @@ body,
 }
 
 .popup-photo {
-  width: 200px;
+  width: auto;
   height: auto;
   border-radius: 4px;
 }

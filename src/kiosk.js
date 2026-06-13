@@ -65,10 +65,9 @@ export function startKiosk(map, geojson) {
     if (!candidates) return
 
     const parsed = parseCandidates(feature)
-    const photoSize = currentLayout
-      ? { photoWidth: currentLayout.photoWidth, photoHeight: currentLayout.photoHeight }
-      : undefined
-    const html = renderPopupContent(parsed, photoSize)
+    const html = currentLayout
+      ? currentLayout.html
+      : renderPopupContent(parsed)
     const [lng, lat] = feature.geometry.coordinates
 
     popup.open(html, [lng, lat])

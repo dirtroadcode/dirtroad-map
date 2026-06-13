@@ -5,6 +5,8 @@ const VIEWPORT_MARGIN = 16
 const CONTENT_PADDING = 24  // .maplibregl-popup-content padding: 12px × 2
 const POPUP_OFFSET = 12      // Popup constructor offset param
 
+import { renderPopupContent } from './popupRenderer.js'
+
 // Estimated rendered heights per text element (font-size × ~1.2 line-height + rounding)
 const NAME_HEIGHT = 22
 const OFFICE_HEIGHT = 17
@@ -222,8 +224,12 @@ export async function prepareLayout(candidates, lat, zoom, viewportHeight) {
     ? Math.max(0, totalHeight - 0.45 * viewportHeight)
     : totalHeight / 2
 
+  // Render HTML with the computed photo sizing baked in
+  const html = renderPopupContent(candidates, photoSize)
+
   return {
     dlat: pixelOffsetToLatOffset(lat, zoom, offsetPx),
+    html,
     photoWidth: photoSize.photoWidth,
     photoHeight: photoSize.photoHeight,
   }

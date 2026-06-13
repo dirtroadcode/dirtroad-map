@@ -1,6 +1,6 @@
 import { CANDIDATE_LAYERS } from './levels.js'
 import { createPopupManager } from './popupManager.js'
-import { computeTargetPhotoSize } from './popupLayout.js'
+import { prepareLayout } from './popupLayout.js'
 
 /**
  * Render a branded popup card for a single candidate.
@@ -11,7 +11,7 @@ export function renderPopupCard(candidate, photoSize) {
   let photo = ''
   if (candidate.photo) {
     const style = photoSize && photoSize.photoWidth > 0
-      ? ` width="${photoSize.photoWidth}" height="${photoSize.photoHeight}" style="object-fit: cover"`
+      ? ` style="width: ${photoSize.photoWidth}px; height: ${photoSize.photoHeight}px; object-fit: cover"`
       : ''
     photo = `<img class="popup-photo" src="${candidate.photo}" alt="${candidate.name}"${style}>`
   }
@@ -59,7 +59,7 @@ export function attachPopupHandlers(map) {
   map.on('click', () => popup.close())
 
   for (const layerId of CANDIDATE_LAYERS) {
-    map.on('click', layerId, (e) => {
+    map.on('click', layerId, async (e) => {
       const features = map.queryRenderedFeatures(e.point, { layers: [layerId] })
       if (!features.length) return
 
@@ -68,14 +68,20 @@ export function attachPopupHandlers(map) {
 
       const parsed = typeof candidates === 'string' ? JSON.parse(candidates) : candidates
 
-      // Compute viewport-aware photo sizing (sync, uses square fallback for aspect ratio)
+      // Use the deep module: preload → compute sizes → render HTML → offset
       const container = map.getContainer && map.getContainer()
       const viewportHeight = container ? container.clientHeight : undefined
-      const photoSize = viewportHeight
-        ? computeTargetPhotoSize(viewportHeight, parsed, new Map())
-        : undefined
+      const center = map.getCenter()
+      const zoom = map.getZoom()
 
-      popup.open(renderPopupContent(parsed, photoSize), e.lngLat)
+      const layout = await prepareLayout(parsed, center.lat, zoom, viewportHeight)
+
+      popup.open(layout.html, e.lngLat)
+
+      // Adjust camera so popup fits below viewport top
+      if (layout.dlat > 0) {
+        map.easeTo({ center: [center.lng, center.lat + layout.dlat], duration: 200 })
+      }
     })
   }
 }

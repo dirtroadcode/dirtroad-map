@@ -59,6 +59,7 @@ export function initMap({ container }) {
     center: US_CENTER,
     zoom: DEFAULT_ZOOM,
     attributionControl: false,
+    minZoom: 3,
   })
 
   const usBounds = [

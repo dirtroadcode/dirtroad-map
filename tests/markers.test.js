@@ -123,41 +123,26 @@ describe('addMarkerLayers', () => {
     const map = createMockMap()
     const csv = header + '\n' + row({ name: 'Alice', level: 'state', lat: '35.0', lng: '-85.0' })
 
-    // Mock global fetch
-    const originalFetch = globalThis.fetch
-    globalThis.fetch = vi.fn().mockResolvedValue({ ok: true, text: () => csv })
-
-    await addMarkerLayers(map)
-
-    globalThis.fetch = originalFetch
+    await addMarkerLayers(map, Promise.resolve(csv))
 
     expect(map._sources['candidates']).toBeDefined()
     expect(map._sources['candidates'].type).toBe('geojson')
     expect(map._sources['candidates'].data.type).toBe('FeatureCollection')
   })
 
-  it('adds glow + dot layers per level with correct colors', async () => {
+  it('adds dot layers per level with correct colors', async () => {
     const map = createMockMap()
     const csv = header + '\n' + row({ name: 'A', level: 'state', lat: '35', lng: '-85' })
       + '\n' + row({ name: 'B', level: 'county', lat: '40', lng: '-74' })
       + '\n' + row({ name: 'C', level: 'local', lat: '34', lng: '-118' })
 
-    const originalFetch = globalThis.fetch
-    globalThis.fetch = vi.fn().mockResolvedValue({ ok: true, text: () => csv })
-
-    await addMarkerLayers(map)
-
-    globalThis.fetch = originalFetch
+    await addMarkerLayers(map, Promise.resolve(csv))
 
     for (const level of ['state', 'county', 'local']) {
-      const glow = map._layers.find(l => l.id === `candidates-${level}-glow`)
       const dot = map._layers.find(l => l.id === `candidates-${level}-dot`)
-      expect(glow).toBeDefined()
       expect(dot).toBeDefined()
-      expect(glow.paint['circle-color']).toBe(COLORS[level])
       expect(dot.paint['circle-color']).toBe(COLORS[level])
-      expect(glow.paint['circle-blur']).toBe(1)
-      expect(glow.paint['circle-opacity']).toBeLessThan(1)
+      expect(dot.paint['circle-opacity']).toBe(1)
     }
   })
 })

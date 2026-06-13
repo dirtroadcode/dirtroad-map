@@ -29,5 +29,9 @@ export function createDeck(items) {
       if (pool.length === 0) refill()
       return pool.pop()
     },
+    peek() {
+      if (pool.length === 0) refill()
+      return pool[pool.length - 1]
+    },
   }
 }
